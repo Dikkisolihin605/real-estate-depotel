@@ -1,0 +1,6 @@
+{
+  "name": "DEPOTEL - Update Token & Swacam",
+  "description": "Aplikasi monitoring dan update status pengisian token listrik dan swacam catat meter DEPOTEL GROUP beserta integrasi WhatsApp dan dokumentasi foto site.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

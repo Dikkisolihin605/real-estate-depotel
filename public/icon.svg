@@ -1,0 +1,168 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#f0f4f8" />
+    </linearGradient>
+    <linearGradient id="navyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#142c65" />
+      <stop offset="100%" stop-color="#09183d" />
+    </linearGradient>
+    <linearGradient id="redGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#e62020" />
+      <stop offset="100%" stop-color="#b80909" />
+    </linearGradient>
+    <linearGradient id="glassGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#d9e6f2" stop-opacity="0.3" />
+    </linearGradient>
+    <!-- Arc paths for text -->
+    <path id="bottomArc" d="M 60,340 A 210,210 0 0,0 440,340" fill="none" />
+    <path id="strikerArc" d="M 120,410 A 180,180 0 0,0 380,410" fill="none" />
+  </defs>
+
+  <!-- Outer Ring Navy -->
+  <circle cx="250" cy="250" r="242" fill="none" stroke="#0e2a6d" stroke-width="12" />
+  <!-- Inner Ring Red -->
+  <circle cx="250" cy="250" r="232" fill="none" stroke="#d61a1a" stroke-width="4" />
+  <!-- Base Background -->
+  <circle cx="250" cy="250" r="228" fill="url(#bgGrad)" />
+
+  <!-- TOP BRAND: DEPOTEL SWOOSH + TEXT -->
+  <g transform="translate(115, 38)">
+    <!-- Red Swoosh Icon -->
+    <g transform="translate(0, 5) scale(0.75)">
+      <ellipse cx="40" cy="24" rx="36" ry="14" fill="none" stroke="#d61a1a" stroke-width="6" transform="rotate(-18 40 24)" />
+      <ellipse cx="44" cy="22" rx="24" ry="9" fill="none" stroke="#d61a1a" stroke-width="5" transform="rotate(-18 44 22)" />
+      <circle cx="48" cy="20" r="4.5" fill="#d61a1a" />
+    </g>
+    <!-- Text DEPOTEL -->
+    <text x="80" y="32" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-style="italic" font-size="34" fill="#0c2356" letter-spacing="1">DEPOTEL</text>
+    <text x="82" y="55" font-family="system-ui, -apple-system, sans-serif" font-weight="800" font-size="22" fill="#0c2356" letter-spacing="4">GROUP</text>
+    <line x1="82" y1="59" x2="200" y2="59" stroke="#0c2356" stroke-width="2.5" />
+  </g>
+
+  <!-- BANNER 1: "UPDATE" (Deep Navy 3D Ribbon) -->
+  <g id="bannerUpdate">
+    <!-- Ribbon Shadow/Fold -->
+    <polygon points="50,185 75,135 425,135 450,185 410,210 90,210" fill="#07132e" />
+    <!-- Main Ribbon Face -->
+    <path d="M 65,140 L 435,140 Q 450,172 435,205 L 65,205 Q 50,172 65,140 Z" fill="url(#navyGrad)" stroke="#ffffff" stroke-width="3" />
+    <path d="M 72,146 L 428,146 Q 440,172 428,199 L 72,199 Q 60,172 72,146 Z" fill="none" stroke="#5078c8" stroke-width="1.5" />
+    <!-- UPDATE Text -->
+    <text x="250" y="192" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="62" fill="#ffffff" text-anchor="middle" letter-spacing="6" stroke="#0a1a3e" stroke-width="2">UPDATE</text>
+  </g>
+
+  <!-- BANNER 2: "TOKEN & SWACAM" (Red Ribbon) -->
+  <g id="bannerToken">
+    <path d="M 38,222 L 462,222 L 448,272 L 52,272 Z" fill="#071536" />
+    <path d="M 45,225 L 455,225 L 442,268 L 58,268 Z" fill="url(#redGrad)" stroke="#ffffff" stroke-width="3" />
+    <text x="250" y="259" font-family="'Arial Black', sans-serif" font-weight="900" font-size="34" fill="#ffffff" text-anchor="middle" letter-spacing="3" stroke="#5e0000" stroke-width="1">TOKEN &amp; SWACAM</text>
+  </g>
+
+  <!-- KWH METER ILLUSTRATION (Center Bottom) -->
+  <g id="kwhMeter" transform="translate(175, 268)">
+    <!-- Meter Box Shadow & Outer Frame -->
+    <rect x="-10" y="0" width="170" height="155" rx="14" fill="#2b3340" />
+    <rect x="-6" y="4" width="162" height="147" rx="12" fill="#f4f6f9" stroke="#b0bec5" stroke-width="3" />
+    <!-- Glass Bezel -->
+    <rect x="4" y="14" width="142" height="110" rx="8" fill="#ffffff" stroke="#90a4ae" stroke-width="1.5" />
+    
+    <!-- Title kWh -->
+    <text x="75" y="32" font-family="sans-serif" font-weight="bold" font-size="14" fill="#37474f" text-anchor="middle">kWh</text>
+    
+    <!-- Rolling Numbers Counter Window -->
+    <g transform="translate(26, 38)">
+      <rect x="0" y="0" width="98" height="26" rx="3" fill="#111111" stroke="#444" stroke-width="1" />
+      <!-- Digits Black 0 0 2 4 6 8 -->
+      <rect x="3" y="2" width="13" height="22" fill="#1e1e1e" />
+      <text x="9.5" y="18" font-family="monospace" font-weight="900" font-size="16" fill="#ffffff" text-anchor="middle">0</text>
+      <rect x="18" y="2" width="13" height="22" fill="#1e1e1e" />
+      <text x="24.5" y="18" font-family="monospace" font-weight="900" font-size="16" fill="#ffffff" text-anchor="middle">0</text>
+      <rect x="33" y="2" width="13" height="22" fill="#1e1e1e" />
+      <text x="39.5" y="18" font-family="monospace" font-weight="900" font-size="16" fill="#ffffff" text-anchor="middle">2</text>
+      <rect x="48" y="2" width="13" height="22" fill="#1e1e1e" />
+      <text x="54.5" y="18" font-family="monospace" font-weight="900" font-size="16" fill="#ffffff" text-anchor="middle">4</text>
+      <rect x="63" y="2" width="13" height="22" fill="#1e1e1e" />
+      <text x="69.5" y="18" font-family="monospace" font-weight="900" font-size="16" fill="#ffffff" text-anchor="middle">6</text>
+      <!-- Red Decimal Digit: 4 -->
+      <rect x="78" y="2" width="16" height="22" fill="#d32f2f" />
+      <text x="86" y="18" font-family="monospace" font-weight="900" font-size="16" fill="#ffffff" text-anchor="middle">4</text>
+    </g>
+
+    <!-- Specs text -->
+    <text x="25" y="76" font-family="sans-serif" font-size="6.5" fill="#546e7a" font-weight="600">230V  5(60)A  50Hz  2W</text>
+    <text x="25" y="86" font-family="sans-serif" font-size="7" fill="#263238" font-weight="bold">KWH METER</text>
+    <text x="25" y="96" font-family="sans-serif" font-size="6.5" fill="#546e7a">CLASS 1   1600 imp/kWh</text>
+    
+    <!-- LED indicator -->
+    <circle cx="120" cy="88" r="4.5" fill="#e53935" stroke="#ffebee" stroke-width="1.5" />
+
+    <!-- Terminal block & wires -->
+    <rect x="15" y="128" width="120" height="26" rx="4" fill="#37474f" />
+    <!-- Terminals -->
+    <circle cx="35" cy="141" r="5" fill="#cfd8dc" stroke="#263238" />
+    <circle cx="60" cy="141" r="5" fill="#cfd8dc" stroke="#263238" />
+    <circle cx="85" cy="141" r="5" fill="#cfd8dc" stroke="#263238" />
+    <circle cx="110" cy="141" r="5" fill="#cfd8dc" stroke="#263238" />
+    
+    <!-- Electric wires coming down -->
+    <line x1="35" y1="146" x2="35" y2="168" stroke="#ff9800" stroke-width="5" stroke-linecap="round" />
+    <line x1="60" y1="146" x2="60" y2="170" stroke="#1976d2" stroke-width="5" stroke-linecap="round" />
+    <line x1="85" y1="146" x2="85" y2="170" stroke="#ffd600" stroke-width="5" stroke-linecap="round" />
+    <line x1="110" y1="146" x2="110" y2="168" stroke="#d32f2f" stroke-width="5" stroke-linecap="round" />
+  </g>
+
+  <!-- LEFT: RED TOKEN PHONE/DEVICE -->
+  <g id="tokenDevice" transform="translate(85, 298)">
+    <rect x="0" y="0" width="58" height="92" rx="10" fill="#d32f2f" stroke="#ffffff" stroke-width="2.5" />
+    <text x="29" y="18" font-family="'Arial Black', sans-serif" font-weight="900" font-size="9" fill="#ffffff" text-anchor="middle">TOKEN</text>
+    <!-- Lightning icon -->
+    <polygon points="31,23 23,38 29,38 27,49 37,34 31,34" fill="#ffffff" />
+    <!-- Keypad 3x4 -->
+    <g transform="translate(10, 52)">
+      <rect x="0" y="0" width="9" height="7" rx="1.5" fill="#ffffff" />
+      <rect x="14" y="0" width="9" height="7" rx="1.5" fill="#ffffff" />
+      <rect x="28" y="0" width="9" height="7" rx="1.5" fill="#ffffff" />
+      <rect x="0" y="10" width="9" height="7" rx="1.5" fill="#ffffff" />
+      <rect x="14" y="10" width="9" height="7" rx="1.5" fill="#ffffff" />
+      <rect x="28" y="10" width="9" height="7" rx="1.5" fill="#ffffff" />
+      <rect x="0" y="20" width="9" height="7" rx="1.5" fill="#ffffff" />
+      <rect x="14" y="20" width="9" height="7" rx="1.5" fill="#ffffff" />
+      <rect x="28" y="20" width="9" height="7" rx="1.5" fill="#ffffff" />
+    </g>
+  </g>
+
+  <!-- RIGHT: CCTV CAMERA -->
+  <g id="cctvCamera" transform="translate(335, 295)">
+    <!-- Wall Mount -->
+    <rect x="80" y="32" width="8" height="24" rx="2" fill="#0d235c" />
+    <path d="M 68,44 L 80,44" stroke="#0d235c" stroke-width="6" stroke-linecap="round" />
+    <circle cx="66" cy="44" r="6" fill="#14327e" />
+    <path d="M 52,36 L 66,44" stroke="#14327e" stroke-width="7" stroke-linecap="round" />
+    <!-- Camera Body -->
+    <g transform="rotate(-15 45 35)">
+      <!-- Barrel -->
+      <polygon points="10,20 62,10 65,45 10,40" fill="#0f296d" stroke="#ffffff" stroke-width="1.5" />
+      <!-- Top Sunshield -->
+      <path d="M 4,14 L 68,4 L 68,12 L 4,20 Z" fill="#1a3d99" />
+      <!-- Lens -->
+      <ellipse cx="10" cy="30" rx="7" ry="11" fill="#091436" stroke="#42a5f5" stroke-width="2" />
+      <circle cx="10" cy="30" r="4" fill="#1e88e5" />
+      <circle cx="9" cy="28" r="1.5" fill="#ffffff" />
+    </g>
+  </g>
+
+  <!-- BOTTOM ARC BANNER: "STRIKER kWh" -->
+  <path d="M 120,436 Q 250,470 380,436 L 392,468 Q 250,502 108,468 Z" fill="#0b2359" stroke="#ffffff" stroke-width="2" />
+  <text x="250" y="464" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="28" fill="#ffffff" text-anchor="middle" letter-spacing="3">STRIKER kWh</text>
+
+  <!-- BOTTOM CIRCULAR TEXT: "UPDATE CEPAT • DATA TEPAT • LAYANAN HEBAT" -->
+  <path id="footerArc" d="M 80,440 A 214,214 0 0,0 420,440" fill="none" />
+  <text font-family="'Arial Black', sans-serif" font-weight="900" font-size="12" fill="#ffffff" letter-spacing="2.5">
+    <textPath href="#footerArc" startOffset="50%" text-anchor="middle">
+      UPDATE CEPAT • DATA TEPAT • LAYANAN HEBAT
+    </textPath>
+  </text>
+</svg>
