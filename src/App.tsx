@@ -28,6 +28,7 @@ import { AddSiteModal } from './components/AddSiteModal';
 import { InviteTeamModal } from './components/InviteTeamModal';
 import { InvitationActivationModal } from './components/InvitationActivationModal';
 import { PublishModal } from './components/PublishModal';
+import { OFFICIAL_TEAM_USERS, getDefaultClientDB } from './initialData';
 
 interface OfflineAction {
   id: string;
@@ -54,7 +55,23 @@ const saveOfflineQueue = (queue: OfflineAction[]) => {
 };
 
 export default function App() {
-  const [data, setData] = useState<DatabaseSchema | null>(null);
+  const [data, setData] = useState<DatabaseSchema>(() => {
+    try {
+      const cached = localStorage.getItem('depotel_cached_db');
+      if (cached) {
+        const parsed: DatabaseSchema = JSON.parse(cached);
+        if (parsed.users && parsed.users.length > 0) {
+          for (const offUser of OFFICIAL_TEAM_USERS) {
+            if (!parsed.users.some((u) => u.id === offUser.id || u.name.toLowerCase() === offUser.name.toLowerCase())) {
+              parsed.users.push({ ...offUser });
+            }
+          }
+          return parsed;
+        }
+      }
+    } catch (_) {}
+    return getDefaultClientDB();
+  });
   const [activeTypeId, setActiveTypeId] = useState<string>('type_token');
   const [currentView, setCurrentView] = useState<'dashboard' | 'monitoring'>('dashboard');
   const [currentUser, setCurrentUser] = useState<AppUser | null>(null);
@@ -191,18 +208,32 @@ export default function App() {
         throw new Error('Server returned error status');
       }
     } catch (err) {
-      console.warn('Network request failed, loading cached data if available:', err);
-      // Fallback to local offline cache
-      if (!lastDataStringRef.current) {
-        try {
-          const cached = localStorage.getItem('depotel_cached_db');
-          if (cached) {
-            const parsed: DatabaseSchema = JSON.parse(cached);
-            setData(parsed);
-            lastDataStringRef.current = cached;
+      console.warn('Network request failed, ensuring default database with 9 official team members:', err);
+      // Fallback to local offline cache or default initial database with 9 users
+      setData((prev) => {
+        let db = prev;
+        if (!db || !db.users || db.users.length === 0) {
+          try {
+            const cached = localStorage.getItem('depotel_cached_db');
+            if (cached) {
+              db = JSON.parse(cached);
+            }
+          } catch (_) {}
+        }
+        if (!db || !db.users || db.users.length === 0) {
+          db = getDefaultClientDB();
+        }
+        // Ensure all 9 official users exist in fallback
+        for (const offUser of OFFICIAL_TEAM_USERS) {
+          if (!db.users.some((u) => u.id === offUser.id || u.name.toLowerCase() === offUser.name.toLowerCase())) {
+            db.users.push({ ...offUser });
           }
+        }
+        try {
+          localStorage.setItem('depotel_cached_db', JSON.stringify(db));
         } catch (_) {}
-      }
+        return { ...db };
+      });
     } finally {
       setIsLoading(false);
       if (!quiet) setIsSyncing(false);
