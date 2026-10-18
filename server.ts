@@ -24,22 +24,17 @@ if (!fs.existsSync(DATA_DIR)) {
   fs.mkdirSync(DATA_DIR, { recursive: true });
 }
 
-// Initial Team Users
+// Initial Team Users - 9 Official Team Members
 const INITIAL_USERS: AppUser[] = [
-  { id: 'u_admin', name: 'Diki Solihin (Admin)', role: 'admin', avatarColor: '#0e2a6d', lastActive: Date.now() },
-  { id: 'u_saddam', name: 'Saddam', role: 'user', avatarColor: '#10b981', lastActive: Date.now() - 60000 },
-  { id: 'u_kusnaedi', name: 'Kusnaedi', role: 'user', avatarColor: '#3b82f6', lastActive: Date.now() - 120000 },
-  { id: 'u_budiman', name: 'Budiman', role: 'user', avatarColor: '#8b5cf6', lastActive: Date.now() - 300000 },
-  { id: 'u_muslim', name: 'Muslim', role: 'user', avatarColor: '#ec4899', lastActive: Date.now() - 500000 },
-  { id: 'u_agustian', name: 'Agustian', role: 'user', avatarColor: '#f59e0b', lastActive: Date.now() - 800000 },
-  { id: 'u_junaedi', name: 'Junaedi', role: 'user', avatarColor: '#06b6d4', lastActive: Date.now() - 1200000 },
-  { id: 'u_samin', name: 'Samin', role: 'user', avatarColor: '#14b8a6', lastActive: Date.now() - 1500000 },
-  { id: 'u_randi', name: 'Randi', role: 'user', avatarColor: '#6366f1', lastActive: Date.now() - 2000000 },
-  { id: 'u_roy', name: 'Roy', role: 'user', avatarColor: '#f97316', lastActive: Date.now() - 3600000 },
-  { id: 'u_romi', name: 'Romi', role: 'user', avatarColor: '#84cc16', lastActive: Date.now() - 7200000 },
-  { id: 'u_kosasih', name: 'Kosasih', role: 'user', avatarColor: '#0284c7', lastActive: Date.now() - 10000000 },
-  { id: 'u_nasrul', name: 'Nasrul', role: 'user', avatarColor: '#d946ef', lastActive: Date.now() - 14000000 },
-  { id: 'u_said', name: 'Said', role: 'user', avatarColor: '#e11d48', lastActive: Date.now() - 18000000 },
+  { id: 'u_admin', name: 'Diki Solihin (Admin)', role: 'admin', email: 'dikisolihin605@gmail.com', avatarColor: '#0e2a6d', lastActive: Date.now() },
+  { id: 'u_saddam', name: 'Saddam', role: 'user', email: 'saddam@gmail.com', avatarColor: '#10b981', lastActive: Date.now() - 60000 },
+  { id: 'u_kusnaedi', name: 'Kusnaedi', role: 'user', email: 'kusnaedi@gmail.com', avatarColor: '#3b82f6', lastActive: Date.now() - 120000 },
+  { id: 'u_samin', name: 'Samin', role: 'user', email: 'samin@gmail.com', avatarColor: '#14b8a6', lastActive: Date.now() - 180000 },
+  { id: 'u_junaedi', name: 'Junaedi', role: 'user', email: 'junaedi@gmail.com', avatarColor: '#06b6d4', lastActive: Date.now() - 240000 },
+  { id: 'u_randi', name: 'Randi', role: 'user', email: 'randi@gmail.com', avatarColor: '#6366f1', lastActive: Date.now() - 300000 },
+  { id: 'u_roy', name: 'Roy', role: 'user', email: 'roy@gmail.com', avatarColor: '#f97316', lastActive: Date.now() - 360000 },
+  { id: 'u_romi', name: 'Romi', role: 'user', email: 'romi@gmail.com', avatarColor: '#84cc16', lastActive: Date.now() - 420000 },
+  { id: 'u_kosasih', name: 'Kosasih', role: 'user', email: 'kosasih@gmail.com', avatarColor: '#0284c7', lastActive: Date.now() - 480000 },
 ];
 
 // Helper to parse site row from prompt
@@ -165,21 +160,90 @@ function getInitialDB(): DatabaseSchema {
 }
 
 function loadDB(): DatabaseSchema {
+  let result: DatabaseSchema;
   try {
     if (fs.existsSync(DB_FILE)) {
       const raw = fs.readFileSync(DB_FILE, 'utf-8');
-      const parsed: DatabaseSchema = JSON.parse(raw);
-      if (!parsed.invitations) {
-        parsed.invitations = [];
+      result = JSON.parse(raw);
+      if (!result.invitations) {
+        result.invitations = [];
       }
-      return parsed;
+      if (!result.users) {
+        result.users = [];
+      }
+    } else {
+      result = getInitialDB();
     }
   } catch (err) {
     console.error('Error reading DB file, creating initial:', err);
+    result = getInitialDB();
   }
-  const init = getInitialDB();
-  saveDB(init);
-  return init;
+
+  // Ensure all 9 official team members exist in result.users
+  let modified = false;
+  for (const officialUser of INITIAL_USERS) {
+    const existingIndex = result.users.findIndex(
+      (u) =>
+        u.id === officialUser.id ||
+        u.name.toLowerCase() === officialUser.name.toLowerCase() ||
+        (officialUser.name.includes('Diki') && u.name.toLowerCase().includes('diki'))
+    );
+    if (existingIndex >= 0) {
+      if (result.users[existingIndex].name !== officialUser.name || result.users[existingIndex].role !== officialUser.role) {
+        result.users[existingIndex].name = officialUser.name;
+        result.users[existingIndex].role = officialUser.role;
+        modified = true;
+      }
+      if (!result.users[existingIndex].email && officialUser.email) {
+        result.users[existingIndex].email = officialUser.email;
+        modified = true;
+      }
+    } else {
+      result.users.push({ ...officialUser });
+      modified = true;
+    }
+  }
+
+  // Keep official members and any additional registered users
+  const officialNames = INITIAL_USERS.map((u) => u.name.toLowerCase());
+  const beforeLen = result.users.length;
+  result.users = result.users.filter((u) =>
+    officialNames.some((on) => u.name.toLowerCase().includes(on.replace(' (admin)', '')) || on.includes(u.name.toLowerCase()))
+  );
+  if (result.users.length !== beforeLen) modified = true;
+
+  // Auto-generate active invitation for each official user if not present
+  if (!result.invitations) result.invitations = [];
+  const now = Date.now();
+  for (const user of result.users) {
+    let inv = result.invitations.find(
+      (i) => i.acceptedUserId === user.id || i.name.toLowerCase() === user.name.toLowerCase()
+    );
+    if (!inv) {
+      const token = crypto.randomBytes(16).toString('hex');
+      const codeDigits = Math.floor(100000 + Math.random() * 900000).toString();
+      inv = {
+        id: `inv_${now}_${Math.random().toString(36).substring(2, 6)}`,
+        token,
+        code: `DEP-${codeDigits}`,
+        name: user.name,
+        email: user.email || `${user.name.toLowerCase().replace(/[\s()]/g, '')}@gmail.com`,
+        role: user.role,
+        status: 'accepted',
+        invitedBy: 'Admin DEPOTEL',
+        createdAt: now,
+        expiresAt: now + 365 * 24 * 3600 * 1000,
+        acceptedUserId: user.id,
+      };
+      result.invitations.push(inv);
+      modified = true;
+    }
+  }
+
+  if (modified) {
+    saveDB(result);
+  }
+  return result;
 }
 
 function saveDB(db: DatabaseSchema) {

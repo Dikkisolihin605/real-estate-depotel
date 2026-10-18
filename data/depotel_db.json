@@ -7,107 +7,72 @@
       "name": "Diki Solihin (Admin)",
       "role": "admin",
       "avatarColor": "#0e2a6d",
-      "lastActive": 1792321286014
+      "lastActive": 1792328248695,
+      "email": "dikisolihin605@gmail.com"
     },
     {
       "id": "u_saddam",
       "name": "Saddam",
       "role": "user",
+      "email": "saddam@gmail.com",
       "avatarColor": "#10b981",
-      "lastActive": 1792320886631
+      "lastActive": 1792328253741
     },
     {
       "id": "u_kusnaedi",
       "name": "Kusnaedi",
       "role": "user",
+      "email": "kusnaedi@gmail.com",
       "avatarColor": "#3b82f6",
-      "lastActive": 1792320899855,
-      "email": "kusnaedi@gmail.com"
-    },
-    {
-      "id": "u_budiman",
-      "name": "Budiman",
-      "role": "user",
-      "avatarColor": "#8b5cf6",
-      "lastActive": 1792321293787,
-      "email": "budiman@gmail.com"
-    },
-    {
-      "id": "u_muslim",
-      "name": "Muslim",
-      "role": "user",
-      "avatarColor": "#ec4899",
-      "lastActive": 1792130802137
-    },
-    {
-      "id": "u_agustian",
-      "name": "Agustian",
-      "role": "user",
-      "avatarColor": "#f59e0b",
-      "lastActive": 1792130502137
-    },
-    {
-      "id": "u_junaedi",
-      "name": "Junaedi",
-      "role": "user",
-      "avatarColor": "#06b6d4",
-      "lastActive": 1792229011208
+      "lastActive": 1792328121975
     },
     {
       "id": "u_samin",
       "name": "Samin",
       "role": "user",
+      "email": "samin@gmail.com",
       "avatarColor": "#14b8a6",
-      "lastActive": 1792136332706
+      "lastActive": 1792328061975
+    },
+    {
+      "id": "u_junaedi",
+      "name": "Junaedi",
+      "role": "user",
+      "email": "junaedi@gmail.com",
+      "avatarColor": "#06b6d4",
+      "lastActive": 1792328001975
     },
     {
       "id": "u_randi",
       "name": "Randi",
       "role": "user",
+      "email": "randi@gmail.com",
       "avatarColor": "#6366f1",
-      "lastActive": 1792129302137
+      "lastActive": 1792327941975
     },
     {
       "id": "u_roy",
       "name": "Roy",
       "role": "user",
+      "email": "roy@gmail.com",
       "avatarColor": "#f97316",
-      "lastActive": 1792136333812
+      "lastActive": 1792327881975
     },
     {
       "id": "u_romi",
       "name": "Romi",
       "role": "user",
+      "email": "romi@gmail.com",
       "avatarColor": "#84cc16",
-      "lastActive": 1792124102137
+      "lastActive": 1792327821975
     },
     {
       "id": "u_kosasih",
       "name": "Kosasih",
       "role": "user",
+      "email": "kosasih@gmail.com",
       "avatarColor": "#0284c7",
-      "lastActive": 1792121302137
-    },
-    {
-      "id": "u_nasrul",
-      "name": "Nasrul",
-      "role": "user",
-      "avatarColor": "#d946ef",
-      "lastActive": 1792117302137
-    },
-    {
-      "id": "u_said",
-      "name": "Said",
-      "role": "user",
-      "avatarColor": "#e11d48",
-      "lastActive": 1792113302137
-    },
-    {
-      "id": "u_1792231372470_08oj",
-      "name": "Putri Takkira",
-      "role": "user",
-      "avatarColor": "#2563eb",
-      "lastActive": 1792320641994
+      "lastActive": 1792327761975
     }
   ],
   "updateTypes": [
@@ -479,9 +444,11 @@
           "customerId": "541300936924",
           "siteCode": "JTX270",
           "siteName": "KEBEMBEMPULOGADUNG",
-          "checked": false,
+          "checked": true,
           "tokenNumber": "1662-9428-8705-0034-1303\n2707-7092-8863-8300-2428",
-          "photos": []
+          "photos": [],
+          "updatedBy": "Putri Takkira",
+          "updatedAt": "18/10/2026, 18.23.18"
         },
         {
           "id": "st_man_4",
@@ -516,46 +483,121 @@
   ],
   "invitations": [
     {
-      "id": "inv_1792319791022_dyau",
-      "token": "1caec19237f37e8000745408ac28d963",
-      "code": "DEP-817762",
-      "name": "Asep Sunandar",
-      "email": "asep@gmail.com",
-      "role": "user",
+      "id": "inv_1792328241976_mj35",
+      "token": "230fe1b35beb34ee568128414ae06776",
+      "code": "DEP-291519",
+      "name": "Diki Solihin (Admin)",
+      "email": "dikisolihin605@gmail.com",
+      "role": "admin",
       "status": "accepted",
-      "invitedBy": "Diki Solihin",
-      "createdAt": 1792319791022,
-      "expiresAt": 1792492591022,
-      "acceptedAt": 1792319797522,
-      "acceptedUserId": "u_1792319797522_84uw"
+      "invitedBy": "Admin DEPOTEL",
+      "createdAt": 1792328241976,
+      "expiresAt": 1823864241976,
+      "acceptedUserId": "u_admin"
     },
     {
-      "id": "inv_1792319823100_bo5p",
-      "token": "b604e771b0280a8925596152f87a8ada",
-      "code": "DEP-401071",
+      "id": "inv_1792328241976_f6eh",
+      "token": "00574f35c8c7f3fb2c1e6b6d13238501",
+      "code": "DEP-195929",
+      "name": "Saddam",
+      "email": "saddam@gmail.com",
+      "role": "user",
+      "status": "accepted",
+      "invitedBy": "Admin DEPOTEL",
+      "createdAt": 1792328241976,
+      "expiresAt": 1823864241976,
+      "acceptedUserId": "u_saddam"
+    },
+    {
+      "id": "inv_1792328241976_0l2n",
+      "token": "16f5d7af39235d77c75e4e303c526211",
+      "code": "DEP-669479",
       "name": "Kusnaedi",
       "email": "kusnaedi@gmail.com",
       "role": "user",
       "status": "accepted",
       "invitedBy": "Admin DEPOTEL",
-      "createdAt": 1792319823100,
-      "expiresAt": 1794912890684,
-      "acceptedUserId": "u_kusnaedi",
-      "acceptedAt": 1792320899855
+      "createdAt": 1792328241976,
+      "expiresAt": 1823864241976,
+      "acceptedUserId": "u_kusnaedi"
     },
     {
-      "id": "inv_1792321282585_kdhg",
-      "token": "428211e26ff25a873f173dc6f16c0511",
-      "code": "DEP-344198",
-      "name": "Budiman",
-      "email": "budiman@gmail.com",
+      "id": "inv_1792328241976_d78c",
+      "token": "408a80c366b19b7cf9eb2bd400785645",
+      "code": "DEP-901973",
+      "name": "Samin",
+      "email": "samin@gmail.com",
       "role": "user",
       "status": "accepted",
       "invitedBy": "Admin DEPOTEL",
-      "createdAt": 1792321282585,
-      "expiresAt": 1794913282585,
-      "acceptedUserId": "u_budiman",
-      "acceptedAt": 1792321293787
+      "createdAt": 1792328241976,
+      "expiresAt": 1823864241976,
+      "acceptedUserId": "u_samin"
+    },
+    {
+      "id": "inv_1792328241976_c3py",
+      "token": "a6e28017c64c33c14b396143f046c9fd",
+      "code": "DEP-476800",
+      "name": "Junaedi",
+      "email": "junaedi@gmail.com",
+      "role": "user",
+      "status": "accepted",
+      "invitedBy": "Admin DEPOTEL",
+      "createdAt": 1792328241976,
+      "expiresAt": 1823864241976,
+      "acceptedUserId": "u_junaedi"
+    },
+    {
+      "id": "inv_1792328241976_zqth",
+      "token": "74e6c4f2d9294f75cbdce4050d55010f",
+      "code": "DEP-286014",
+      "name": "Randi",
+      "email": "randi@gmail.com",
+      "role": "user",
+      "status": "accepted",
+      "invitedBy": "Admin DEPOTEL",
+      "createdAt": 1792328241976,
+      "expiresAt": 1823864241976,
+      "acceptedUserId": "u_randi"
+    },
+    {
+      "id": "inv_1792328241976_2cxx",
+      "token": "b3e2d5934b010f2f64ae45898ecf9bd7",
+      "code": "DEP-491545",
+      "name": "Roy",
+      "email": "roy@gmail.com",
+      "role": "user",
+      "status": "accepted",
+      "invitedBy": "Admin DEPOTEL",
+      "createdAt": 1792328241976,
+      "expiresAt": 1823864241976,
+      "acceptedUserId": "u_roy"
+    },
+    {
+      "id": "inv_1792328241976_k30f",
+      "token": "56847397e1622bd93d5b86994c4ed12f",
+      "code": "DEP-422026",
+      "name": "Romi",
+      "email": "romi@gmail.com",
+      "role": "user",
+      "status": "accepted",
+      "invitedBy": "Admin DEPOTEL",
+      "createdAt": 1792328241976,
+      "expiresAt": 1823864241976,
+      "acceptedUserId": "u_romi"
+    },
+    {
+      "id": "inv_1792328241976_e0my",
+      "token": "c5a508d77f97b2ead6d50a3266c22f68",
+      "code": "DEP-345976",
+      "name": "Kosasih",
+      "email": "kosasih@gmail.com",
+      "role": "user",
+      "status": "accepted",
+      "invitedBy": "Admin DEPOTEL",
+      "createdAt": 1792328241976,
+      "expiresAt": 1823864241976,
+      "acceptedUserId": "u_kosasih"
     }
   ]
 }
