@@ -240,6 +240,36 @@ function loadDB(): DatabaseSchema {
     }
   }
 
+  // Ensure standard categories have their sites populated with default checked: false if empty
+  const tokenType = result.updateTypes.find((t) => t.id === 'type_token');
+  if (tokenType && (!tokenType.sites || tokenType.sites.length === 0)) {
+    tokenType.sites = SITES_TOKEN.map((s) => ({ ...s, checked: false }));
+    tokenType.customTotalTarget = tokenType.sites.length;
+    modified = true;
+  }
+  const swacamType = result.updateTypes.find((t) => t.id === 'type_swacam');
+  if (swacamType && (!swacamType.sites || swacamType.sites.length === 0)) {
+    swacamType.sites = SITES_SWACAM.map((s) => ({ ...s, checked: false }));
+    swacamType.customTotalTarget = swacamType.sites.length;
+    modified = true;
+  }
+  const manualType = result.updateTypes.find((t) => t.id === 'type_manual');
+  if (manualType && (!manualType.sites || manualType.sites.length === 0)) {
+    manualType.sites = SITES_MANUAL.map((s) => ({ ...s, checked: false }));
+    manualType.customTotalTarget = manualType.sites.length;
+    modified = true;
+  }
+
+  // Requirement 1 & 10: Every site without a saved checked state defaults to false (silang / ✗)
+  for (const ut of result.updateTypes) {
+    for (const site of ut.sites) {
+      if (typeof site.checked !== 'boolean') {
+        site.checked = false;
+        modified = true;
+      }
+    }
+  }
+
   if (modified) {
     saveDB(result);
   }
@@ -396,10 +426,6 @@ app.post('/api/sites/:typeId/:siteId/token', (req, res) => {
   site.updatedBy = updatedBy || site.updatedBy || 'Petugas';
   site.updatedAt = new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' });
   
-  // If token is filled and wasn't checked, optionally mark checked
-  if (tokenNumber && tokenNumber.trim().length > 0) {
-    site.checked = true;
-  }
   saveDB(db);
 
   res.json({ success: true, site });
