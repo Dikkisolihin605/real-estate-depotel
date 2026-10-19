@@ -2,6 +2,28 @@
 <html lang="id">
   <head>
     <meta charset="UTF-8" />
+    <script>
+      // Runtime constraint: HMR is disabled in cloud iframe environment, ignore WebSocket errors
+      window.addEventListener(
+        'error',
+        function (e) {
+          var msg = e && (e.message || (e.error && e.error.message)) ? String(e.message || e.error.message) : '';
+          if (msg.indexOf('WebSocket') !== -1 || msg.indexOf('closed without opened') !== -1) {
+            e.preventDefault && e.preventDefault();
+            e.stopImmediatePropagation && e.stopImmediatePropagation();
+            return true;
+          }
+        },
+        true
+      );
+      window.addEventListener('unhandledrejection', function (e) {
+        var reason = e && e.reason ? String(e.reason.message || e.reason) : '';
+        if (reason.indexOf('WebSocket') !== -1 || reason.indexOf('closed without opened') !== -1) {
+          e.preventDefault && e.preventDefault();
+          e.stopImmediatePropagation && e.stopImmediatePropagation();
+        }
+      });
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>DEPOTEL - Update Token & Swacam</title>
     <meta name="description" content="Aplikasi monitoring dan update status pengisian token listrik dan swacam catat meter DEPOTEL GROUP beserta integrasi WhatsApp dan dokumentasi foto site." />
