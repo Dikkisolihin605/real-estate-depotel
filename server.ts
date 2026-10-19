@@ -643,6 +643,9 @@ app.post('/api/users', (req, res) => {
   const trimmed = name.trim();
   const existing = db.users.find(u => u.name.toLowerCase() === trimmed.toLowerCase());
   if (existing) {
+    if (role && (role === 'admin' || role === 'user') && existing.role !== role) {
+      existing.role = role;
+    }
     existing.lastActive = Date.now();
     saveDB(db);
     return res.json({ success: true, user: existing, alreadyExisted: true, users: enrichUsersOnline(db.users) });
@@ -660,6 +663,25 @@ app.post('/api/users', (req, res) => {
   };
 
   db.users.push(newUser);
+
+  // Auto-generate active accepted invitation for the newly created user
+  if (!db.invitations) db.invitations = [];
+  const token = crypto.randomBytes(16).toString('hex');
+  const codeDigits = Math.floor(100000 + Math.random() * 900000).toString();
+  db.invitations.push({
+    id: `inv_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+    token,
+    code: `DEP-${codeDigits}`,
+    name: trimmed,
+    email: `${trimmed.toLowerCase().replace(/[\s()]/g, '')}@gmail.com`,
+    role: role === 'admin' ? 'admin' : 'user',
+    status: 'accepted',
+    invitedBy: 'Admin DEPOTEL',
+    createdAt: Date.now(),
+    expiresAt: Date.now() + 365 * 24 * 3600 * 1000,
+    acceptedUserId: newUser.id,
+  });
+
   saveDB(db);
 
   res.json({ success: true, user: newUser, users: enrichUsersOnline(db.users) });

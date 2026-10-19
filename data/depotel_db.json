@@ -7,7 +7,7 @@
       "name": "Diki Solihin (Admin)",
       "role": "admin",
       "avatarColor": "#0e2a6d",
-      "lastActive": 1792435919532,
+      "lastActive": 1792437209279,
       "email": "dikisolihin605@gmail.com"
     },
     {
@@ -91,8 +91,8 @@
           "checked": false,
           "tokenNumber": "",
           "photos": [],
-          "updatedBy": "Diki Solihin (Admin)",
-          "updatedAt": "20/10/2026, 01.51.32"
+          "updatedBy": "Fajar Nugraha",
+          "updatedAt": "20/10/2026, 02.13.26"
         },
         {
           "id": "st_2",
@@ -656,7 +656,9 @@
           "siteName": "PERMANEN COMBAT CIPINANG BUNDER",
           "checked": false,
           "tokenNumber": "3115-6424-5771-5814-2746\n7351-7828-2974-3713-5630",
-          "photos": []
+          "photos": [],
+          "updatedBy": "Diki Solihin (Admin)",
+          "updatedAt": "20/10/2026, 01.52.53"
         },
         {
           "id": "st_man_5",
@@ -797,6 +799,19 @@
       "createdAt": 1792328241976,
       "expiresAt": 1823864241976,
       "acceptedUserId": "u_kosasih"
+    },
+    {
+      "id": "inv_1792437192015_qr4e",
+      "token": "169fa0821dcfa3a0672807806d2cbc00",
+      "code": "DEP-733576",
+      "name": "Fajar Nugraha",
+      "email": "fajarnugraha@gmail.com",
+      "role": "user",
+      "status": "accepted",
+      "invitedBy": "Admin DEPOTEL",
+      "createdAt": 1792437192015,
+      "expiresAt": 1823973192015,
+      "acceptedUserId": "u_1792437192015_texx"
     }
   ]
 }

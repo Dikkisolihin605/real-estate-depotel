@@ -55,38 +55,62 @@ export const UserLoginModal: React.FC<UserLoginModalProps> = ({
     }
   }, [isOpen, activeTab]);
 
+  // Merge any custom users added by admin to ensure newly registered members are immediately available
+  const allAvailableUsers = useMemo(() => {
+    const list = [...users];
+    try {
+      const customRaw = localStorage.getItem('depotel_custom_users');
+      if (customRaw) {
+        const customUsers: AppUser[] = JSON.parse(customRaw);
+        for (const cu of customUsers) {
+          if (!list.some((u) => u.id === cu.id || u.name.toLowerCase() === cu.name.toLowerCase())) {
+            list.push(cu);
+          }
+        }
+      }
+    } catch (_) {}
+    return list;
+  }, [users]);
+
   // Real-time filtered users based on typed name for reference list
   const filteredUsers = useMemo(() => {
     const q = typedName.toLowerCase().trim();
-    if (!q) return users;
-    return users.filter(
+    if (!q) return allAvailableUsers;
+    return allAvailableUsers.filter(
       (u) =>
         u.name.toLowerCase().includes(q) ||
         (u.email || '').toLowerCase().includes(q)
     );
-  }, [users, typedName]);
+  }, [allAvailableUsers, typedName]);
 
   // Check if typed name matches a registered user (case-insensitive exact or clean match)
   const matchedUser = useMemo(() => {
     const q = typedName.toLowerCase().trim();
     if (!q) return null;
     // 1. Exact case-insensitive match
-    const exact = users.find((u) => u.name.trim().toLowerCase() === q);
+    const exact = allAvailableUsers.find((u) => u.name.trim().toLowerCase() === q);
     if (exact) return exact;
 
     // 2. Partial match if typing prefix matches name words (e.g. "Diki" matches "Diki Solihin (Admin)")
-    const cleanExact = users.find((u) => {
+    const cleanExact = allAvailableUsers.find((u) => {
       const uName = u.name.toLowerCase().replace(/\s*\(admin\)/g, '').trim();
       return uName === q;
     });
     if (cleanExact) return cleanExact;
 
-    // 3. Single unambiguous match if query is at least 3 chars
-    if (q.length >= 3 && filteredUsers.length === 1) {
+    // 3. Match if user's name starts with or includes query
+    const prefixMatch = allAvailableUsers.find((u) => {
+      const uName = u.name.toLowerCase().replace(/\s*\(admin\)/g, '').trim();
+      return uName.startsWith(q) || q.startsWith(uName);
+    });
+    if (prefixMatch) return prefixMatch;
+
+    // 4. Single unambiguous match if query is at least 2 chars
+    if (q.length >= 2 && filteredUsers.length === 1) {
       return filteredUsers[0];
     }
     return null;
-  }, [users, typedName, filteredUsers]);
+  }, [allAvailableUsers, typedName, filteredUsers]);
 
   if (!isOpen) return null;
 
@@ -101,8 +125,22 @@ export const UserLoginModal: React.FC<UserLoginModalProps> = ({
       return;
     }
 
-    if (matchedUser) {
-      onSelectUser(matchedUser);
+    // Try matchedUser first, or find any user containing the typed name
+    const foundUser =
+      matchedUser ||
+      allAvailableUsers.find((u) => {
+        const uClean = u.name.toLowerCase().replace(/\s*\(admin\)/g, '').trim();
+        const qClean = q.toLowerCase();
+        return (
+          uClean === qClean ||
+          u.name.toLowerCase().trim() === qClean ||
+          uClean.includes(qClean) ||
+          qClean.includes(uClean)
+        );
+      });
+
+    if (foundUser) {
+      onSelectUser(foundUser);
       onClose();
       return;
     }
@@ -351,7 +389,7 @@ export const UserLoginModal: React.FC<UserLoginModalProps> = ({
                   <div className="flex items-center gap-1.5">
                     <Users className="h-3.5 w-3.5 text-blue-400" />
                     <span>
-                      Daftar Anggota Tim Terdaftar ({users.length} Teknisi)
+                      Daftar Anggota Tim Terdaftar ({allAvailableUsers.length} Teknisi)
                     </span>
                   </div>
                   <span className="flex items-center gap-1 rounded-full bg-slate-800 px-2 py-0.5 text-[10px] font-bold text-amber-300 border border-slate-700">
@@ -362,7 +400,7 @@ export const UserLoginModal: React.FC<UserLoginModalProps> = ({
 
                 {/* Non-clickable card grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-[34vh] overflow-y-auto pr-1 select-none">
-                  {users.map((user) => {
+                  {allAvailableUsers.map((user) => {
                     const isMatched = matchedUser?.id === user.id;
 
                     return (

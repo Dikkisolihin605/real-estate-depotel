@@ -233,6 +233,19 @@ export default function App() {
         }
       }
 
+      // Guarantee that all custom users added by admin exist in json.users
+      try {
+        const customUsersRaw = localStorage.getItem('depotel_custom_users');
+        if (customUsersRaw) {
+          const customUsers: AppUser[] = JSON.parse(customUsersRaw);
+          for (const cu of customUsers) {
+            if (!json.users.some((u) => u.id === cu.id || u.name.toLowerCase() === cu.name.toLowerCase())) {
+              json.users.push(cu);
+            }
+          }
+        }
+      } catch (_) {}
+
       // If there are pending local toggle/token actions (e.g. running on static Vercel host), apply them to keep the user's checklist state intact
       const pendingQueue = getOfflineQueue();
       if (pendingQueue.length > 0) {
@@ -319,6 +332,18 @@ export default function App() {
             db.users.push({ ...offUser });
           }
         }
+        // Also ensure all custom users added by admin exist in fallback
+        try {
+          const customUsersRaw = localStorage.getItem('depotel_custom_users');
+          if (customUsersRaw) {
+            const customUsers: AppUser[] = JSON.parse(customUsersRaw);
+            for (const cu of customUsers) {
+              if (!db.users.some((u) => u.id === cu.id || u.name.toLowerCase() === cu.name.toLowerCase())) {
+                db.users.push(cu);
+              }
+            }
+          }
+        } catch (_) {}
         try {
           localStorage.setItem('depotel_cached_db', JSON.stringify(db));
         } catch (_) {}
@@ -337,9 +362,18 @@ export default function App() {
           }
         } catch (_) {}
       } else if (savedUserId) {
-        const offFound = OFFICIAL_TEAM_USERS.find((u) => u.id === savedUserId);
-        if (offFound) {
-          setCurrentUser(offFound);
+        let found = OFFICIAL_TEAM_USERS.find((u) => u.id === savedUserId);
+        if (!found) {
+          try {
+            const customRaw = localStorage.getItem('depotel_custom_users');
+            if (customRaw) {
+              const list: AppUser[] = JSON.parse(customRaw);
+              found = list.find((u) => u.id === savedUserId);
+            }
+          } catch (_) {}
+        }
+        if (found) {
+          setCurrentUser(found);
           setIsLoginModalOpen(false);
         }
       }
@@ -1123,6 +1157,7 @@ export default function App() {
   };
 
   const handleAddUserAdmin = async (name: string, role: 'admin' | 'user') => {
+    let createdUser: AppUser | null = null;
     try {
       const res = await fetch('/api/users', {
         method: 'POST',
@@ -1130,31 +1165,56 @@ export default function App() {
         body: JSON.stringify({ name, role }),
       });
       if (res.ok) {
-        showToast(`Anggota ${name} berhasil ditambahkan`);
-        fetchData(true);
-        return;
+        const json = await res.json().catch(() => null);
+        if (json?.user) {
+          createdUser = json.user;
+        }
       }
     } catch (_) {}
 
-    const newUser: AppUser = {
-      id: `u_${Date.now()}`,
-      name: name.trim(),
-      role,
-      avatarColor: role === 'admin' ? '#0e2a6d' : '#3b82f6',
-      lastActive: Date.now(),
-      isOnline: false,
-    };
+    if (!createdUser) {
+      createdUser = {
+        id: `u_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+        name: name.trim(),
+        role,
+        avatarColor: role === 'admin' ? '#0e2a6d' : '#3b82f6',
+        lastActive: Date.now(),
+        isOnline: false,
+      };
+    }
+
+    // Persist to local custom users store for static Vercel host and offline consistency
+    try {
+      const customRaw = localStorage.getItem('depotel_custom_users');
+      const list: AppUser[] = customRaw ? JSON.parse(customRaw) : [];
+      const idx = list.findIndex(
+        (u) => u.id === createdUser!.id || u.name.toLowerCase() === createdUser!.name.toLowerCase()
+      );
+      if (idx >= 0) list[idx] = createdUser!;
+      else list.push(createdUser!);
+      localStorage.setItem('depotel_custom_users', JSON.stringify(list));
+    } catch (_) {}
+
     setData((prev) => {
+      if (!prev) return prev;
+      const exists = prev.users.some(
+        (u) => u.id === createdUser!.id || u.name.toLowerCase() === createdUser!.name.toLowerCase()
+      );
+      const updatedUsers = exists
+        ? prev.users.map((u) => (u.id === createdUser!.id ? createdUser! : u))
+        : [...prev.users, createdUser!];
       const updated = {
         ...prev,
-        users: [...(prev?.users || []), newUser],
+        users: updatedUsers,
       };
       try {
         localStorage.setItem('depotel_cached_db', JSON.stringify(updated));
       } catch (_) {}
       return updated;
     });
-    showToast(`Anggota ${name} berhasil ditambahkan`);
+
+    showToast(`✅ Anggota "${name}" berhasil ditambahkan dan langsung aktif!`);
+    fetchData(true);
   };
 
   const handleUpdateUserRole = async (userId: string, role: 'admin' | 'user') => {
