@@ -91,6 +91,22 @@ export const SiteCardComponent: React.FC<SiteCardProps> = ({
             {site.siteName || '-'}
           </p>
 
+          {/* Live Update Metadata: Shows who last checked/updated this site */}
+          {site.updatedBy && (
+            <div className="flex flex-wrap items-center gap-1.5 text-[10px] sm:text-[11px] text-slate-500 font-medium">
+              <span className="inline-flex items-center gap-1">
+                <span className={`h-1.5 w-1.5 rounded-full ${site.checked ? 'bg-emerald-500' : 'bg-slate-400'}`} />
+                <span>Diperbarui oleh: <strong className="text-slate-800 font-bold">{site.updatedBy}</strong></span>
+              </span>
+              {site.updatedAt && (
+                <>
+                  <span className="text-slate-300">•</span>
+                  <span className="text-slate-400">{site.updatedAt}</span>
+                </>
+              )}
+            </div>
+          )}
+
           {/* Third Line: Tambah No. Token (User can input token) */}
           {!isSwacam && !site.tokenNumber && (
             <div className="pt-0.5">

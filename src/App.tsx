@@ -54,6 +54,19 @@ const saveOfflineQueue = (queue: OfflineAction[]) => {
   } catch {}
 };
 
+const LIVE_BACKEND_URL = 'https://ais-pre-sw2koyy2muflakec6krfxb-148906958408.asia-southeast1.run.app';
+
+export const getApiUrl = (path: string): string => {
+  if (typeof window !== 'undefined') {
+    const origin = window.location.origin;
+    // When running on Vercel or external domain, connect to the shared Cloud Run backend
+    if (origin.includes('vercel.app') || origin.includes('localhost:5173')) {
+      return `${LIVE_BACKEND_URL}${path.startsWith('/') ? path : '/' + path}`;
+    }
+  }
+  return path;
+};
+
 export default function App() {
   const [data, setData] = useState<DatabaseSchema>(() => {
     try {
@@ -199,7 +212,7 @@ export default function App() {
     try {
       let json: DatabaseSchema | null = null;
       try {
-        const res = await fetch('/api/data');
+        const res = await fetch(getApiUrl('/api/data'));
         if (res.ok) {
           const contentType = res.headers.get('content-type') || '';
           if (contentType.includes('application/json')) {
@@ -211,7 +224,7 @@ export default function App() {
       // Fallback to static JSON file (guaranteed to work on static Vercel deployment)
       if (!json) {
         try {
-          const staticRes = await fetch('/data/depotel_db.json');
+          const staticRes = await fetch(getApiUrl('/data/depotel_db.json'));
           if (staticRes.ok) {
             const contentType = staticRes.headers.get('content-type') || '';
             if (contentType.includes('application/json')) {
@@ -514,7 +527,7 @@ export default function App() {
     const connectSSE = () => {
       if (isDisposed) return;
       try {
-        es = new EventSource('/api/events');
+        es = new EventSource(getApiUrl('/api/events'));
         es.onmessage = (event) => {
           if (!event.data) return;
           try {
@@ -528,7 +541,7 @@ export default function App() {
           es?.close();
           es = null;
           if (!isDisposed) {
-            reconnectTimer = setTimeout(connectSSE, 2500);
+            reconnectTimer = setTimeout(connectSSE, 2000);
           }
         };
       } catch (_) {}
@@ -560,18 +573,18 @@ export default function App() {
     };
   }, [processIncomingDb]);
 
-  // 2. Periodic heartbeat & resilient fallback data sync (2 seconds)
+  // 2. Ultra-snappy periodic heartbeat & fallback data sync (every 1 second)
   useEffect(() => {
     const interval = setInterval(() => {
       if (currentUser) {
-        fetch('/api/heartbeat', {
+        fetch(getApiUrl('/api/heartbeat'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ userId: currentUser.id, userName: currentUser.name }),
         }).catch(() => {});
       }
       fetchData(true);
-    }, 2000);
+    }, 1000);
 
     const handleFocusSync = () => {
       if (document.visibilityState === 'visible') {
@@ -672,7 +685,7 @@ export default function App() {
     };
 
     try {
-      const res = await fetch(`/api/sites/${currentUpdateType.id}/${site.id}/toggle`, {
+      const res = await fetch(getApiUrl(`/api/sites/${currentUpdateType.id}/${site.id}/toggle`), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),

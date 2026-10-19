@@ -291,6 +291,9 @@ function broadcastSSE(data: any) {
   for (const client of sseClients) {
     try {
       client.write(payload);
+      if (typeof (client as any).flush === 'function') {
+        (client as any).flush();
+      }
     } catch (_) {
       sseClients.delete(client);
     }
@@ -329,6 +332,17 @@ let db = loadDB();
 const app = express();
 const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 
+// Universal CORS Middleware for Real-Time access across Vercel, mobile & cloud domains
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Cache-Control');
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  next();
+});
+
 // High limits for camera photo storage (Base64 data URLs)
 app.use(express.json({ limit: '60mb' }));
 app.use(express.urlencoded({ extended: true, limit: '60mb' }));
@@ -352,6 +366,7 @@ app.get('/api/events', (req, res) => {
   res.setHeader('Cache-Control', 'no-cache, no-transform');
   res.setHeader('Connection', 'keep-alive');
   res.setHeader('X-Accel-Buffering', 'no');
+  res.setHeader('Access-Control-Allow-Origin', '*');
   res.flushHeaders?.();
 
   // Send initial snapshot on connect
@@ -363,11 +378,14 @@ app.get('/api/events', (req, res) => {
   const keepAlive = setInterval(() => {
     try {
       res.write(': keepalive\n\n');
+      if (typeof (res as any).flush === 'function') {
+        (res as any).flush();
+      }
     } catch {
       clearInterval(keepAlive);
       sseClients.delete(res);
     }
-  }, 15000);
+  }, 10000);
 
   req.on('close', () => {
     clearInterval(keepAlive);
