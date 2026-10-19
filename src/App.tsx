@@ -473,7 +473,94 @@ export default function App() {
     }
   }, [fetchData]);
 
-  // Periodic heartbeat & real-time data sync across all users and admin (Requirement 5)
+  // Process incoming real-time database state from SSE / BroadcastChannel / Polling
+  const processIncomingDb = useCallback((incomingDb: DatabaseSchema) => {
+    if (!incomingDb) return;
+    const newDb = { ...incomingDb };
+    if (!newDb.users) newDb.users = [];
+    for (const offUser of OFFICIAL_TEAM_USERS) {
+      if (!newDb.users.some((u) => u.id === offUser.id || u.name.toLowerCase() === offUser.name.toLowerCase())) {
+        newDb.users.push({ ...offUser });
+      }
+    }
+    try {
+      const customUsersRaw = localStorage.getItem('depotel_custom_users');
+      if (customUsersRaw) {
+        const customUsers = JSON.parse(customUsersRaw);
+        for (const cu of customUsers) {
+          if (!newDb.users.some((u) => u.id === cu.id || u.name.toLowerCase() === cu.name.toLowerCase())) {
+            newDb.users.push(cu);
+          }
+        }
+      }
+    } catch (_) {}
+
+    const newStr = JSON.stringify(newDb);
+    if (newStr !== lastDataStringRef.current) {
+      lastDataStringRef.current = newStr;
+      setData(newDb);
+      try {
+        localStorage.setItem('depotel_cached_db', newStr);
+      } catch (_) {}
+    }
+  }, []);
+
+  // 1. Instant Real-Time Synchronization via Server-Sent Events (SSE) & BroadcastChannel
+  useEffect(() => {
+    let es: EventSource | null = null;
+    let reconnectTimer: any = null;
+    let isDisposed = false;
+
+    const connectSSE = () => {
+      if (isDisposed) return;
+      try {
+        es = new EventSource('/api/events');
+        es.onmessage = (event) => {
+          if (!event.data) return;
+          try {
+            const parsed = JSON.parse(event.data);
+            if (parsed.db) {
+              processIncomingDb(parsed.db);
+            }
+          } catch (_) {}
+        };
+        es.onerror = () => {
+          es?.close();
+          es = null;
+          if (!isDisposed) {
+            reconnectTimer = setTimeout(connectSSE, 2500);
+          }
+        };
+      } catch (_) {}
+    };
+
+    connectSSE();
+
+    // Multi-tab instant sync in the same browser session
+    let channel: BroadcastChannel | null = null;
+    try {
+      if (typeof BroadcastChannel !== 'undefined') {
+        channel = new BroadcastChannel('depotel_realtime_sync');
+        channel.onmessage = (event) => {
+          if (event.data?.db) {
+            processIncomingDb(event.data.db);
+          }
+        };
+      }
+    } catch (_) {}
+
+    return () => {
+      isDisposed = true;
+      if (es) {
+        es.close();
+        es = null;
+      }
+      if (reconnectTimer) clearTimeout(reconnectTimer);
+      if (channel) channel.close();
+    };
+  }, [processIncomingDb]);
+
+  // 2. Periodic heartbeat & resilient fallback data sync (2 seconds)
   useEffect(() => {
     const interval = setInterval(() => {
       if (currentUser) {
@@ -484,7 +571,7 @@ export default function App() {
         }).catch(() => {});
       }
       fetchData(true);
-    }, 3500);
+    }, 2000);
 
     const handleFocusSync = () => {
       if (document.visibilityState === 'visible') {
@@ -567,6 +654,11 @@ export default function App() {
       };
       try {
         localStorage.setItem('depotel_cached_db', JSON.stringify(updated));
+        if (typeof BroadcastChannel !== 'undefined') {
+          const ch = new BroadcastChannel('depotel_realtime_sync');
+          ch.postMessage({ db: updated });
+          ch.close();
+        }
       } catch (_) {}
       return updated;
     });

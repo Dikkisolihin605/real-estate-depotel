@@ -73,6 +73,14 @@ export const OFFICIAL_TEAM_USERS: AppUser[] = [
     avatarColor: '#0284c7',
     lastActive: Date.now() - 480000,
   },
+  {
+    id: 'u_nasrul',
+    name: 'Nasrul',
+    role: 'user',
+    email: 'nasrul@gmail.com',
+    avatarColor: '#8b5cf6',
+    lastActive: Date.now() - 540000,
+  },
 ];
 
 function makeSite(

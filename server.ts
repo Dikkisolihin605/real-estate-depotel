@@ -35,6 +35,7 @@ const INITIAL_USERS: AppUser[] = [
   { id: 'u_roy', name: 'Roy', role: 'user', email: 'roy@gmail.com', avatarColor: '#f97316', lastActive: Date.now() - 360000 },
   { id: 'u_romi', name: 'Romi', role: 'user', email: 'romi@gmail.com', avatarColor: '#84cc16', lastActive: Date.now() - 420000 },
   { id: 'u_kosasih', name: 'Kosasih', role: 'user', email: 'kosasih@gmail.com', avatarColor: '#0284c7', lastActive: Date.now() - 480000 },
+  { id: 'u_nasrul', name: 'Nasrul', role: 'user', email: 'nasrul@gmail.com', avatarColor: '#8b5cf6', lastActive: Date.now() - 540000 },
 ];
 
 // Helper to parse site row from prompt
@@ -281,6 +282,21 @@ function loadDB(): DatabaseSchema {
   return result;
 }
 
+// Store active SSE client responses for Real-Time synchronization
+const sseClients: Set<express.Response> = new Set();
+
+function broadcastSSE(data: any) {
+  if (sseClients.size === 0) return;
+  const payload = `data: ${JSON.stringify(data)}\n\n`;
+  for (const client of sseClients) {
+    try {
+      client.write(payload);
+    } catch (_) {
+      sseClients.delete(client);
+    }
+  }
+}
+
 function saveDB(db: DatabaseSchema) {
   try {
     fs.writeFileSync(DB_FILE, JSON.stringify(db, null, 2), 'utf-8');
@@ -293,6 +309,17 @@ function saveDB(db: DatabaseSchema) {
   } catch (err) {
     console.error('Error saving DB:', err);
   }
+
+  // Instant real-time push to all connected users and admins
+  try {
+    broadcastSSE({
+      type: 'db_update',
+      db: {
+        ...db,
+        users: enrichUsersOnline(db.users),
+      },
+    });
+  } catch (_) {}
 }
 
 // Active database in memory
@@ -318,6 +345,35 @@ function enrichUsersOnline(users: AppUser[]): AppUser[] {
 }
 
 // ======================== API ROUTES ========================
+
+// Real-Time Server-Sent Events (SSE) Stream for Instant Dashboard Sync across all users & admin
+app.get('/api/events', (req, res) => {
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache, no-transform');
+  res.setHeader('Connection', 'keep-alive');
+  res.setHeader('X-Accel-Buffering', 'no');
+  res.flushHeaders?.();
+
+  // Send initial snapshot on connect
+  res.write(`data: ${JSON.stringify({ type: 'init', db: { ...db, users: enrichUsersOnline(db.users) } })}\n\n`);
+
+  sseClients.add(res);
+
+  // Send periodic keep-alive ping to keep connection healthy
+  const keepAlive = setInterval(() => {
+    try {
+      res.write(': keepalive\n\n');
+    } catch {
+      clearInterval(keepAlive);
+      sseClients.delete(res);
+    }
+  }, 15000);
+
+  req.on('close', () => {
+    clearInterval(keepAlive);
+    sseClients.delete(res);
+  });
+});
 
 // 1. Get entire state
 app.get('/api/data', (_req, res) => {

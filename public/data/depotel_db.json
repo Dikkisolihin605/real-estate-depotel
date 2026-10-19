@@ -7,7 +7,7 @@
       "name": "Diki Solihin (Admin)",
       "role": "admin",
       "avatarColor": "#0e2a6d",
-      "lastActive": 1792437209279,
+      "lastActive": 1792439094169,
       "email": "dikisolihin605@gmail.com"
     },
     {
@@ -73,6 +73,14 @@
       "email": "kosasih@gmail.com",
       "avatarColor": "#0284c7",
       "lastActive": 1792327761975
+    },
+    {
+      "id": "u_nasrul",
+      "name": "Nasrul",
+      "role": "user",
+      "email": "nasrul@gmail.com",
+      "avatarColor": "#8b5cf6",
+      "lastActive": 1792437661353
     }
   ],
   "updateTypes": [
@@ -91,8 +99,8 @@
           "checked": false,
           "tokenNumber": "",
           "photos": [],
-          "updatedBy": "Fajar Nugraha",
-          "updatedAt": "20/10/2026, 02.13.26"
+          "updatedBy": "Nasrul",
+          "updatedAt": "20/10/2026, 02.30.13"
         },
         {
           "id": "st_2",
@@ -812,6 +820,19 @@
       "createdAt": 1792437192015,
       "expiresAt": 1823973192015,
       "acceptedUserId": "u_1792437192015_texx"
+    },
+    {
+      "id": "inv_1792438201354_cyj0",
+      "token": "0cf5c793352fa6acb67d96e2e2c64b7d",
+      "code": "DEP-795100",
+      "name": "Nasrul",
+      "email": "nasrul@gmail.com",
+      "role": "user",
+      "status": "accepted",
+      "invitedBy": "Admin DEPOTEL",
+      "createdAt": 1792438201354,
+      "expiresAt": 1823974201354,
+      "acceptedUserId": "u_nasrul"
     }
   ]
 }
