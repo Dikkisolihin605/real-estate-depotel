@@ -25,7 +25,7 @@ import {
 import type { TeamInvitation, UserRole, AppUser } from '../types';
 
 export const PUBLIC_SHARED_URL =
-  'https://ais-pre-sw2koyy2muflakec6krfxb-148906958408.asia-southeast1.run.app';
+  'https://real-estate-depotel.vercel.app';
 
 export const getWorkingOrigin = (): string => {
   if (typeof window !== 'undefined' && window.location.origin) {
@@ -34,7 +34,7 @@ export const getWorkingOrigin = (): string => {
       return origin;
     }
   }
-  return 'https://ais-dev-sw2koyy2muflakec6krfxb-148906958408.asia-southeast1.run.app';
+  return 'https://real-estate-depotel.vercel.app';
 };
 
 interface InviteTeamModalProps {

@@ -3,25 +3,15 @@ import {
   X,
   Users,
   UserPlus,
-  Link as LinkIcon,
-  Copy,
-  Check,
   LogOut,
   Shield,
   Trash2,
   Camera,
-  Image as ImageIcon,
   RotateCcw,
-  Send,
   Pencil,
   AlertTriangle,
-  Lock,
-  Smartphone,
-  Download,
 } from 'lucide-react';
 import type { AppUser } from '../types';
-import { PWAInstallButton } from './PWAInstallButton';
-import { getLatestInviteUrl } from './InviteTeamModal';
 
 interface AccountSettingsModalProps {
   isOpen: boolean;
@@ -50,7 +40,6 @@ export const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({
 }) => {
   const [newUserName, setNewUserName] = useState('');
   const [newUserRole, setNewUserRole] = useState<'admin' | 'user'>('user');
-  const [copiedLink, setCopiedLink] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
   const avatarInputRef = useRef<HTMLInputElement>(null);
@@ -69,17 +58,6 @@ export const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({
   const isAdmin = currentUser?.role === 'admin';
 
   if (!isOpen) return null;
-
-  const getInviteUrl = () => {
-    return getLatestInviteUrl();
-  };
-
-  const handleCopyInviteLink = () => {
-    const url = getInviteUrl();
-    navigator.clipboard.writeText(url);
-    setCopiedLink(true);
-    setTimeout(() => setCopiedLink(false), 2500);
-  };
 
   const handleAvatarFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -325,149 +303,6 @@ export const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({
               </div>
             </div>
           </div>
-
-          {/* Download APK / PWA Section - Google Chrome Install Access */}
-          <div className="rounded-2xl border border-blue-200 bg-blue-50/70 p-3.5 space-y-2.5">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Smartphone className="h-4 w-4 text-blue-700" />
-                <h4 className="text-xs font-black uppercase tracking-wider text-blue-950">
-                  Download APK / PWA Resmi di Google Chrome
-                </h4>
-              </div>
-              <span className="text-[10px] text-emerald-700 font-extrabold bg-emerald-100 px-2 py-0.5 rounded-full border border-emerald-300">
-                PWA Siap Dipasang
-              </span>
-            </div>
-            <p className="text-xs text-slate-700 leading-relaxed">
-              Buka aplikasi ini di <strong>Google Chrome Android</strong> untuk men-download dan memasang WebAPK resmi DEPOTEL ke layar utama HP Anda. Berjalan normal tanpa address bar browser, super cepat, dan hemat kuota.
-            </p>
-            <div className="space-y-2">
-              <PWAInstallButton variant="settings" />
-              <button
-                type="button"
-                onClick={() => {
-                  const launcherHtml = `<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DEPOTEL Mobile App</title>
-  <meta http-equiv="refresh" content="0; url=${window.location.origin}">
-  <script>
-    window.location.replace("${window.location.origin}");
-  </script>
-</head>
-<body style="margin:0;display:flex;align-items:center;justify-content:center;height:100vh;background:#0e2a6d;color:#fff;font-family:sans-serif;text-align:center;">
-  <div>
-    <h2>Membuka Aplikasi DEPOTEL...</h2>
-    <p>Jika tidak terbuka otomatis, <a href="${window.location.origin}" style="color:#fde047;">klik di sini</a></p>
-  </div>
-</body>
-</html>`;
-                  const blob = new Blob([launcherHtml], { type: 'text/html' });
-                  const url = URL.createObjectURL(blob);
-                  const a = document.createElement('a');
-                  a.href = url;
-                  a.download = 'DEPOTEL-Aplikasi-Mobile.html';
-                  document.body.appendChild(a);
-                  a.click();
-                  document.body.removeChild(a);
-                  URL.revokeObjectURL(url);
-                }}
-                className="flex w-full items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-3 py-2 text-xs font-bold text-slate-800 shadow-xs hover:bg-slate-50 active:scale-95 transition cursor-pointer"
-              >
-                <Download className="h-3.5 w-3.5 text-blue-700" />
-                <span>Unduh File Launcher APK PWA (.html)</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Invitation Link Section (Admin Only - Hidden for User Account) */}
-          {isAdmin && (
-            <div className="rounded-2xl border border-blue-200 bg-blue-50/60 p-4 space-y-2.5">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-1.5">
-                  <LinkIcon className="h-4 w-4 text-blue-600" />
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-blue-900">
-                    Link Undangan Anggota Tim
-                  </h4>
-                </div>
-                <span className="text-[10px] text-emerald-600 font-bold">Link Aktif Terbaru</span>
-              </div>
-
-              {/* Google / Gmail support badge */}
-              <div className="flex items-center gap-2.5 rounded-xl bg-white p-2.5 border border-blue-200 text-xs text-blue-900 shadow-2xs">
-                <svg className="h-4 w-4 flex-shrink-0" viewBox="0 0 24 24">
-                  <path
-                    fill="#4285F4"
-                    d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                  />
-                  <path
-                    fill="#34A853"
-                    d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                  />
-                  <path
-                    fill="#FBBC05"
-                    d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
-                  />
-                  <path
-                    fill="#EA4335"
-                    d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
-                  />
-                </svg>
-                <span className="text-[11px] leading-tight font-medium">
-                  Dukungan Login Google / Gmail &amp; pilihan {users.length} nama teknisi terdaftar
-                </span>
-              </div>
-
-              <p className="text-xs text-slate-600">
-                Bagikan link ini ke WhatsApp rekan tim agar langsung dapat membuka dashboard dan login sesuai akun/namanya.
-              </p>
-
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 pt-1">
-                <input
-                  type="text"
-                  readOnly
-                  value={getInviteUrl()}
-                  className="flex-1 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-mono text-slate-700 select-all focus:outline-none"
-                />
-                <div className="flex items-center gap-2 flex-shrink-0">
-                  <button
-                    type="button"
-                    onClick={handleCopyInviteLink}
-                    className="flex items-center justify-center gap-1.5 rounded-xl bg-slate-900 px-3.5 py-2 text-xs font-bold text-white shadow-xs hover:bg-slate-800 active:scale-95 transition cursor-pointer"
-                  >
-                    {copiedLink ? (
-                      <>
-                        <Check className="h-4 w-4 text-emerald-400" />
-                        <span>Tersalin!</span>
-                      </>
-                    ) : (
-                      <>
-                        <Copy className="h-4 w-4" />
-                        <span>Salin</span>
-                      </>
-                    )}
-                  </button>
-                  <a
-                    href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
-                      `Halo rekan tim DEPOTEL! Silakan masuk ke aplikasi monitoring Update Token & Swacam melalui link terbaru berikut:\n\n${getInviteUrl()}\n\nBuka link untuk masuk menggunakan akun Google / Gmail Anda atau pilih nama Anda yang terdaftar.`
-                    )}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-1.5 rounded-xl bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow-xs hover:bg-emerald-500 active:scale-95 transition cursor-pointer"
-                  >
-                    <Send className="h-4 w-4" />
-                    <span>WhatsApp</span>
-                  </a>
-                </div>
-              </div>
-              <p className="text-[10px] text-slate-500">
-                ✅ Link terbaru aktif langsung terhubung ke server saat ini tanpa error.
-              </p>
-            </div>
-          )}
 
           {/* Registered Users List & Add User Form (Admin ONLY - Hidden for User Account) */}
           {isAdmin && (

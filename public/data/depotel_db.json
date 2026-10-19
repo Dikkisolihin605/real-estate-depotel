@@ -1,0 +1,603 @@
+{
+  "version": 1,
+  "activeTypeId": "type_token",
+  "users": [
+    {
+      "id": "u_admin",
+      "name": "Diki Solihin (Admin)",
+      "role": "admin",
+      "avatarColor": "#0e2a6d",
+      "lastActive": 1792431352802,
+      "email": "dikisolihin605@gmail.com"
+    },
+    {
+      "id": "u_saddam",
+      "name": "Saddam",
+      "role": "user",
+      "email": "saddam@gmail.com",
+      "avatarColor": "#10b981",
+      "lastActive": 1792328253741
+    },
+    {
+      "id": "u_kusnaedi",
+      "name": "Kusnaedi",
+      "role": "user",
+      "email": "kusnaedi@gmail.com",
+      "avatarColor": "#3b82f6",
+      "lastActive": 1792328121975
+    },
+    {
+      "id": "u_samin",
+      "name": "Samin",
+      "role": "user",
+      "email": "samin@gmail.com",
+      "avatarColor": "#14b8a6",
+      "lastActive": 1792328061975
+    },
+    {
+      "id": "u_junaedi",
+      "name": "Junaedi",
+      "role": "user",
+      "email": "junaedi@gmail.com",
+      "avatarColor": "#06b6d4",
+      "lastActive": 1792328001975
+    },
+    {
+      "id": "u_randi",
+      "name": "Randi",
+      "role": "user",
+      "email": "randi@gmail.com",
+      "avatarColor": "#6366f1",
+      "lastActive": 1792327941975
+    },
+    {
+      "id": "u_roy",
+      "name": "Roy",
+      "role": "user",
+      "email": "roy@gmail.com",
+      "avatarColor": "#f97316",
+      "lastActive": 1792327881975
+    },
+    {
+      "id": "u_romi",
+      "name": "Romi",
+      "role": "user",
+      "email": "romi@gmail.com",
+      "avatarColor": "#84cc16",
+      "lastActive": 1792327821975
+    },
+    {
+      "id": "u_kosasih",
+      "name": "Kosasih",
+      "role": "user",
+      "email": "kosasih@gmail.com",
+      "avatarColor": "#0284c7",
+      "lastActive": 1792327761975
+    }
+  ],
+  "updateTypes": [
+    {
+      "id": "type_token",
+      "name": "Pengisian Token Listrik SWFM - DEPOTEL",
+      "period": "Bulan Oktober 2026",
+      "iconType": "token",
+      "customTotalTarget": 31,
+      "sites": [
+        {
+          "id": "st_1",
+          "customerId": "547402150841",
+          "siteCode": "EPE134",
+          "siteName": "GGLANGGARKEBAGUSANEMRSSIAGARAYAEASYMACRO",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": [],
+          "updatedBy": "Putri Takkira",
+          "updatedAt": "18/10/2026, 16.38.50"
+        },
+        {
+          "id": "st_2",
+          "customerId": "547402159954",
+          "siteCode": "EPE133",
+          "siteName": "JLSIMANENORKEBAGUSANEMACRO",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": [],
+          "updatedBy": "Putri Takkira",
+          "updatedAt": "18/10/2026, 16.38.49"
+        },
+        {
+          "id": "st_3",
+          "customerId": "541300722052",
+          "siteCode": "COC143",
+          "siteName": "CMBTCIPINANGBUNDER",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": [],
+          "updatedBy": "Putri Takkira",
+          "updatedAt": "18/10/2026, 16.38.48"
+        },
+        {
+          "id": "st_4",
+          "customerId": "544204835266",
+          "siteCode": "JKT640",
+          "siteName": "SMPNGPDKOPI",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": [],
+          "updatedBy": "Putri Takkira",
+          "updatedAt": "18/10/2026, 16.38.48"
+        },
+        {
+          "id": "st_5",
+          "customerId": "544104549801",
+          "siteCode": "EPE121",
+          "siteName": "KEBONPALAKPMELAYUEMACRO",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": [],
+          "updatedBy": "Putri Takkira",
+          "updatedAt": "18/10/2026, 16.38.46"
+        },
+        {
+          "id": "st_6",
+          "customerId": "547402151453",
+          "siteCode": "EPE118",
+          "siteName": "CIPEDAKDALAMSRENGSENGEMACRO",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": [],
+          "updatedBy": "Putri Takkira",
+          "updatedAt": "18/10/2026, 16.38.45"
+        },
+        {
+          "id": "st_7",
+          "customerId": "544104493058",
+          "siteCode": "EPE105",
+          "siteName": "JLKEBONPALA2EASYMACRO",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": [],
+          "updatedBy": "Putri Takkira",
+          "updatedAt": "18/10/2026, 16.38.44"
+        },
+        {
+          "id": "st_8",
+          "customerId": "547202531409",
+          "siteCode": "EPE123",
+          "siteName": "JLRAHAYU2KALISARIEMACRO",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": [],
+          "updatedBy": "Putri Takkira",
+          "updatedAt": "18/10/2026, 16.38.43"
+        },
+        {
+          "id": "st_9",
+          "customerId": "547402040765",
+          "siteCode": "EPE101",
+          "siteName": "BINCONDETEMACRO",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": [],
+          "updatedBy": "Saddam",
+          "updatedAt": "16/10/2026, 13.18.16"
+        },
+        {
+          "id": "st_10",
+          "customerId": "547402176096",
+          "siteCode": "EPE141",
+          "siteName": "JLPEJATENBARAT2EMACRO",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": []
+        },
+        {
+          "id": "st_11",
+          "customerId": "544205151195",
+          "siteCode": "EPE158",
+          "siteName": "JLMENTENGPURNAMACAKUNGEMACRO",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": []
+        },
+        {
+          "id": "st_12",
+          "customerId": "547402134366",
+          "siteCode": "EPE127",
+          "siteName": "JLNUSAINDAHEMACRO",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": []
+        },
+        {
+          "id": "st_13",
+          "customerId": "547402131207",
+          "siteCode": "EPE125",
+          "siteName": "JLHAJIICANGEMACRO",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": []
+        },
+        {
+          "id": "st_14",
+          "customerId": "547104799792",
+          "siteCode": "EPE078",
+          "siteName": "BATUAMPAREMACROODMT",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": [],
+          "updatedBy": "Saddam",
+          "updatedAt": "16/10/2026, 13.18.21"
+        },
+        {
+          "id": "st_15",
+          "customerId": "543602512320",
+          "siteCode": "EPE066",
+          "siteName": "PASARPONDOKLABUEMACRO",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": []
+        },
+        {
+          "id": "st_16",
+          "customerId": "547104987172",
+          "siteCode": "EPE130",
+          "siteName": "KKPHALIMEMACRO",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": [],
+          "updatedBy": "Saddam",
+          "updatedAt": "16/10/2026, 13.18.23"
+        },
+        {
+          "id": "st_17",
+          "customerId": "547104989288",
+          "siteCode": "EPE162",
+          "siteName": "JLKAMPUNGBARUHALIMEMACRO",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": [],
+          "updatedBy": "Saddam",
+          "updatedAt": "16/10/2026, 13.18.24"
+        },
+        {
+          "id": "st_18",
+          "customerId": "547202522340",
+          "siteCode": "EPE135",
+          "siteName": "SMAN58EMACRO",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": []
+        },
+        {
+          "id": "st_19",
+          "customerId": "544205132920",
+          "siteCode": "EPE153",
+          "siteName": "JLKAPUK3EMACRO",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": [],
+          "updatedBy": "Saddam",
+          "updatedAt": "16/10/2026, 13.18.25"
+        },
+        {
+          "id": "st_20",
+          "customerId": "544104486916",
+          "siteCode": "EPE100",
+          "siteName": "GGCIPARAI10EMACRO",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": [],
+          "updatedBy": "Saddam",
+          "updatedAt": "16/10/2026, 13.18.27"
+        },
+        {
+          "id": "st_21",
+          "customerId": "544205151888",
+          "siteCode": "EPE149",
+          "siteName": "JLLANGGARRAYAPDBAMBUEMACRO",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": [],
+          "updatedBy": "Saddam",
+          "updatedAt": "16/10/2026, 13.18.27"
+        },
+        {
+          "id": "st_22",
+          "customerId": "544205145232",
+          "siteCode": "EPE119",
+          "siteName": "JLKELURAHANRAYADURENSAWITEMACRO",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": [],
+          "updatedBy": "Saddam",
+          "updatedAt": "16/10/2026, 13.18.29"
+        },
+        {
+          "id": "st_23",
+          "customerId": "541301866778",
+          "siteCode": "EPE122",
+          "siteName": "JLPULONANGKAPULOGADUNGEMACRO",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": [],
+          "updatedBy": "Saddam",
+          "updatedAt": "16/10/2026, 13.18.31"
+        },
+        {
+          "id": "st_24",
+          "customerId": "547202543826",
+          "siteCode": "EPE124",
+          "siteName": "GGHIDENGCILANGKAPEMACRO",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": []
+        },
+        {
+          "id": "st_25",
+          "customerId": "547402134118",
+          "siteCode": "EPE156",
+          "siteName": "JLPAGUJATENPOINT13EMACRO",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": []
+        },
+        {
+          "id": "st_26",
+          "customerId": "547104958661",
+          "siteCode": "EPE107",
+          "siteName": "JLBATUBULATEMACRO",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": [],
+          "updatedBy": "Saddam",
+          "updatedAt": "16/10/2026, 13.18.34"
+        },
+        {
+          "id": "st_27",
+          "customerId": "547402145270",
+          "siteCode": "EPE132",
+          "siteName": "JLCIKOKOBRTEMACRO",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": []
+        },
+        {
+          "id": "st_28",
+          "customerId": "547402097726",
+          "siteCode": "EPE104",
+          "siteName": "PANGADEGANPANCORANEMACRO",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": []
+        },
+        {
+          "id": "st_29",
+          "customerId": "547401249697",
+          "siteCode": "JSX938",
+          "siteName": "PANGADEGANTIMUR3",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": []
+        },
+        {
+          "id": "st_30",
+          "customerId": "543105914221",
+          "siteCode": "EPE108",
+          "siteName": "JLCIPETERAYAEMACRO",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": []
+        },
+        {
+          "id": "st_31",
+          "customerId": "514485849567",
+          "siteCode": "EPE111",
+          "siteName": "DARULARQOMEASYMACRO-PTI",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": [],
+          "updatedBy": "Saddam",
+          "updatedAt": "16/10/2026, 13.18.38"
+        }
+      ],
+      "createdAt": 1789539302138
+    },
+    {
+      "id": "type_swacam",
+      "name": "Update Swacam/Catat Meter - DEPOTEL",
+      "period": "23-27 Oktober 2026",
+      "iconType": "swacam",
+      "customTotalTarget": 0,
+      "sites": [],
+      "createdAt": 1790403302138
+    },
+    {
+      "id": "type_manual",
+      "name": "Pengisian Token Listrik Manual - DEPOTEL",
+      "period": "Bulan Oktober 2026",
+      "iconType": "manual",
+      "customTotalTarget": 6,
+      "sites": [
+        {
+          "id": "st_man_1",
+          "customerId": "541301045422",
+          "siteCode": "JTX376",
+          "siteName": "KAYUPUTIHPACUANKUDAI4T",
+          "checked": false,
+          "tokenNumber": "0694-0057-9935-5566-9177\n4883-3281-0673-1088-7723\n4592-0662-1913-4727-4940",
+          "photos": [],
+          "updatedBy": "Putri Takkira",
+          "updatedAt": "18/10/2026, 17.16.47"
+        },
+        {
+          "id": "st_man_2",
+          "customerId": "544204129460",
+          "siteCode": "JTX269",
+          "siteName": "MASJIDALKAUTSAR",
+          "checked": false,
+          "tokenNumber": "3414-4270-4674-4895-1323\n0855-3835-0869-4010-4460",
+          "photos": []
+        },
+        {
+          "id": "st_man_3",
+          "customerId": "541300936924",
+          "siteCode": "JTX270",
+          "siteName": "KEBEMBEMPULOGADUNG",
+          "checked": true,
+          "tokenNumber": "1662-9428-8705-0034-1303\n2707-7092-8863-8300-2428",
+          "photos": [],
+          "updatedBy": "Putri Takkira",
+          "updatedAt": "18/10/2026, 18.23.18"
+        },
+        {
+          "id": "st_man_4",
+          "customerId": "541300853217",
+          "siteCode": "JTX006",
+          "siteName": "PERMANEN COMBAT CIPINANG BUNDER",
+          "checked": false,
+          "tokenNumber": "3115-6424-5771-5814-2746\n7351-7828-2974-3713-5630",
+          "photos": []
+        },
+        {
+          "id": "st_man_5",
+          "customerId": "544203861556",
+          "siteCode": "JTX017",
+          "siteName": "DRSUMARNO 2",
+          "checked": false,
+          "tokenNumber": "5105-3636-5375-1622-4356\n7098-1295-5676-4391-7297",
+          "photos": []
+        },
+        {
+          "id": "st_man_6",
+          "customerId": "544204059954",
+          "siteCode": "JTX024",
+          "siteName": "PENGGILINGAN ELOK",
+          "checked": false,
+          "tokenNumber": "3443-7752-5217-6499-9426\n4929-3442-8912-0354-8906",
+          "photos": []
+        }
+      ],
+      "createdAt": 1791267302138
+    }
+  ],
+  "invitations": [
+    {
+      "id": "inv_1792328241976_mj35",
+      "token": "230fe1b35beb34ee568128414ae06776",
+      "code": "DEP-291519",
+      "name": "Diki Solihin (Admin)",
+      "email": "dikisolihin605@gmail.com",
+      "role": "admin",
+      "status": "accepted",
+      "invitedBy": "Admin DEPOTEL",
+      "createdAt": 1792328241976,
+      "expiresAt": 1823864241976,
+      "acceptedUserId": "u_admin"
+    },
+    {
+      "id": "inv_1792328241976_f6eh",
+      "token": "00574f35c8c7f3fb2c1e6b6d13238501",
+      "code": "DEP-195929",
+      "name": "Saddam",
+      "email": "saddam@gmail.com",
+      "role": "user",
+      "status": "accepted",
+      "invitedBy": "Admin DEPOTEL",
+      "createdAt": 1792328241976,
+      "expiresAt": 1823864241976,
+      "acceptedUserId": "u_saddam"
+    },
+    {
+      "id": "inv_1792328241976_0l2n",
+      "token": "16f5d7af39235d77c75e4e303c526211",
+      "code": "DEP-669479",
+      "name": "Kusnaedi",
+      "email": "kusnaedi@gmail.com",
+      "role": "user",
+      "status": "accepted",
+      "invitedBy": "Admin DEPOTEL",
+      "createdAt": 1792328241976,
+      "expiresAt": 1823864241976,
+      "acceptedUserId": "u_kusnaedi"
+    },
+    {
+      "id": "inv_1792328241976_d78c",
+      "token": "408a80c366b19b7cf9eb2bd400785645",
+      "code": "DEP-901973",
+      "name": "Samin",
+      "email": "samin@gmail.com",
+      "role": "user",
+      "status": "accepted",
+      "invitedBy": "Admin DEPOTEL",
+      "createdAt": 1792328241976,
+      "expiresAt": 1823864241976,
+      "acceptedUserId": "u_samin"
+    },
+    {
+      "id": "inv_1792328241976_c3py",
+      "token": "a6e28017c64c33c14b396143f046c9fd",
+      "code": "DEP-476800",
+      "name": "Junaedi",
+      "email": "junaedi@gmail.com",
+      "role": "user",
+      "status": "accepted",
+      "invitedBy": "Admin DEPOTEL",
+      "createdAt": 1792328241976,
+      "expiresAt": 1823864241976,
+      "acceptedUserId": "u_junaedi"
+    },
+    {
+      "id": "inv_1792328241976_zqth",
+      "token": "74e6c4f2d9294f75cbdce4050d55010f",
+      "code": "DEP-286014",
+      "name": "Randi",
+      "email": "randi@gmail.com",
+      "role": "user",
+      "status": "accepted",
+      "invitedBy": "Admin DEPOTEL",
+      "createdAt": 1792328241976,
+      "expiresAt": 1823864241976,
+      "acceptedUserId": "u_randi"
+    },
+    {
+      "id": "inv_1792328241976_2cxx",
+      "token": "b3e2d5934b010f2f64ae45898ecf9bd7",
+      "code": "DEP-491545",
+      "name": "Roy",
+      "email": "roy@gmail.com",
+      "role": "user",
+      "status": "accepted",
+      "invitedBy": "Admin DEPOTEL",
+      "createdAt": 1792328241976,
+      "expiresAt": 1823864241976,
+      "acceptedUserId": "u_roy"
+    },
+    {
+      "id": "inv_1792328241976_k30f",
+      "token": "56847397e1622bd93d5b86994c4ed12f",
+      "code": "DEP-422026",
+      "name": "Romi",
+      "email": "romi@gmail.com",
+      "role": "user",
+      "status": "accepted",
+      "invitedBy": "Admin DEPOTEL",
+      "createdAt": 1792328241976,
+      "expiresAt": 1823864241976,
+      "acceptedUserId": "u_romi"
+    },
+    {
+      "id": "inv_1792328241976_e0my",
+      "token": "c5a508d77f97b2ead6d50a3266c22f68",
+      "code": "DEP-345976",
+      "name": "Kosasih",
+      "email": "kosasih@gmail.com",
+      "role": "user",
+      "status": "accepted",
+      "invitedBy": "Admin DEPOTEL",
+      "createdAt": 1792328241976,
+      "expiresAt": 1823864241976,
+      "acceptedUserId": "u_kosasih"
+    }
+  ]
+}

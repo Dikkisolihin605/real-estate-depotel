@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   UserPlus,
   Plus,
@@ -7,7 +7,9 @@ import {
   ArrowUpRight,
   Check,
   X,
-  Globe,
+  Copy,
+  Send,
+  Share2,
 } from 'lucide-react';
 import type { UpdateType, AppUser } from '../types';
 
@@ -17,7 +19,7 @@ interface DashboardOverviewProps {
   onSelectUpdateType: (id: string) => void;
   onOpenInviteModal: () => void;
   onOpenNewPeriodModal: () => void;
-  onOpenPublishModal: () => void;
+  onOpenPublishModal?: () => void;
   onEditPeriod: (updateType: UpdateType) => void;
   onDeletePeriod: (id: string, name: string) => void;
 }
@@ -28,11 +30,30 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
   onSelectUpdateType,
   onOpenInviteModal,
   onOpenNewPeriodModal,
-  onOpenPublishModal,
   onEditPeriod,
   onDeletePeriod,
 }) => {
+  const [copiedLink, setCopiedLink] = useState(false);
   const isAdmin = currentUser?.role === 'admin';
+
+  const OFFICIAL_VERCEL_LINK = 'https://real-estate-depotel.vercel.app';
+
+  const handleCopyVercelLink = async () => {
+    try {
+      await navigator.clipboard.writeText(OFFICIAL_VERCEL_LINK);
+      setCopiedLink(true);
+      setTimeout(() => setCopiedLink(false), 2500);
+    } catch {
+      const ta = document.createElement('textarea');
+      ta.value = OFFICIAL_VERCEL_LINK;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      setCopiedLink(true);
+      setTimeout(() => setCopiedLink(false), 2500);
+    }
+  };
 
   const getCategoryBadge = (iconType: string, name: string) => {
     const isSwacam = iconType === 'swacam' || name.toLowerCase().includes('swacam');
@@ -91,19 +112,9 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
             Tandai site dengan centang bila sudah diisi dan silang bila belum. Persentase terhitung otomatis.
           </p>
 
-          {/* Action Buttons: Only Admin Buttons (Publish, Invite, New Period). Install Icon removed as requested */}
+          {/* Action Buttons: Only Admin Buttons (Undang user, New Period). Publish Link removed as requested */}
           {isAdmin && (
             <div className="flex flex-wrap items-center gap-2 pt-2">
-              <button
-                type="button"
-                onClick={onOpenPublishModal}
-                className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-blue-700 to-indigo-700 px-4 py-2.5 text-xs sm:text-sm font-black text-white shadow-xs hover:from-blue-600 hover:to-indigo-600 active:scale-95 transition cursor-pointer"
-                title="Publikasikan link agar semua HP bisa mengakses (Khusus Admin)"
-              >
-                <Globe className="h-4 w-4 text-blue-200" />
-                <span>Publish Link</span>
-              </button>
-
               <button
                 type="button"
                 onClick={onOpenInviteModal}
@@ -125,6 +136,62 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
               </button>
             </div>
           )}
+        </div>
+      </div>
+
+      {/* Official Link DEPOTEL for Users (https://real-estate-depotel.vercel.app) */}
+      <div className="rounded-3xl border border-blue-200/90 bg-gradient-to-r from-blue-50 via-indigo-50/60 to-white p-4 sm:p-5 shadow-xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="space-y-1.5 min-w-0 flex-1">
+            <div className="flex items-center gap-2">
+              <span className="flex h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse flex-shrink-0" />
+              <span className="text-xs font-black uppercase tracking-wider text-blue-950">
+                Link Aplikasi DEPOTEL Resmi (Untuk Dibagikan ke User):
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="font-mono text-xs sm:text-sm font-black text-blue-800 bg-white/90 px-3 py-1.5 rounded-xl border border-blue-200 shadow-2xs select-all truncate">
+                {OFFICIAL_VERCEL_LINK}
+              </span>
+            </div>
+            <p className="text-[11px] text-slate-500">
+              Bagikan link ini ke rekan teknisi / admin agar dapat membuka dashboard dari HP manapun tanpa login ulang saat refresh.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <button
+              type="button"
+              onClick={handleCopyVercelLink}
+              className="flex items-center justify-center gap-1.5 rounded-xl bg-slate-900 px-3.5 py-2.5 text-xs font-black text-white shadow-xs hover:bg-slate-800 active:scale-95 transition cursor-pointer"
+              title="Salin Link ke Clipboard"
+            >
+              {copiedLink ? (
+                <>
+                  <Check className="h-4 w-4 text-emerald-400" />
+                  <span>Tersalin!</span>
+                </>
+              ) : (
+                <>
+                  <Copy className="h-4 w-4" />
+                  <span>Salin Link</span>
+                </>
+              )}
+            </button>
+
+            <a
+              href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
+                `Halo rekan tim DEPOTEL! Silakan buka aplikasi monitoring Update Token & Swacam melalui link resmi berikut:\n\n${OFFICIAL_VERCEL_LINK}\n\nLink ini dapat diakses langsung dari HP manapun.`
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-1.5 rounded-xl bg-emerald-600 px-3.5 py-2.5 text-xs font-black text-white shadow-xs hover:bg-emerald-500 active:scale-95 transition cursor-pointer"
+              title="Bagikan Link ke WhatsApp"
+            >
+              <Send className="h-4 w-4" />
+              <span>WhatsApp</span>
+            </a>
+          </div>
         </div>
       </div>
 

@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "rewrites": [
+    {
+      "source": "/data/depotel_db.json",
+      "destination": "/data/depotel_db.json"
+    },
+    {
+      "source": "/((?!data/).*)",
+      "destination": "/index.html"
+    }
+  ]
+}
