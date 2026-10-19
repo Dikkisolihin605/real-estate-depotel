@@ -424,7 +424,7 @@ export default function App() {
     }
   }, [fetchData]);
 
-  // Periodic heartbeat & data sync (every 10 seconds)
+  // Periodic heartbeat & real-time data sync across all users and admin (Requirement 5)
   useEffect(() => {
     const interval = setInterval(() => {
       if (currentUser) {
@@ -435,9 +435,21 @@ export default function App() {
         }).catch(() => {});
       }
       fetchData(true);
-    }, 10000);
+    }, 3500);
 
-    return () => clearInterval(interval);
+    const handleFocusSync = () => {
+      if (document.visibilityState === 'visible') {
+        fetchData(true);
+      }
+    };
+    window.addEventListener('focus', handleFocusSync);
+    document.addEventListener('visibilitychange', handleFocusSync);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('focus', handleFocusSync);
+      document.removeEventListener('visibilitychange', handleFocusSync);
+    };
   }, [currentUser, fetchData]);
 
   // Pull to refresh handler
@@ -471,39 +483,113 @@ export default function App() {
     });
   }, [currentUpdateType, statusFilter, searchQuery]);
 
-  // 1. Toggle site checked status
+  // 1. Toggle / set site checked status (✓ / ✗) with backend permission check and persistence
   const handleToggleSite = async (site: SiteItem) => {
     if (!currentUser) {
       setIsLoginModalOpen(true);
-      showToast('Silakan pilih nama Anda terlebih dahulu sebelum mencentang site.');
+      showToast('Silakan pilih nama Anda terlebih dahulu sebelum mengubah status.');
       return;
     }
     if (!currentUpdateType) return;
     const previousState = site.checked;
+    const newChecked = !previousState;
 
+    // Optimistic UI update
     setData((prev) => {
       if (!prev) return prev;
-      return {
+      const updated = {
         ...prev,
         updateTypes: prev.updateTypes.map((ut) => {
           if (ut.id !== currentUpdateType.id) return ut;
           return {
             ...ut,
-            sites: ut.sites.map((s) => (s.id === site.id ? { ...s, checked: !s.checked } : s)),
+            sites: ut.sites.map((s) =>
+              s.id === site.id
+                ? {
+                    ...s,
+                    checked: newChecked,
+                    updatedBy: currentUser.name,
+                    updatedAt: new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' }),
+                  }
+                : s
+            ),
           };
         }),
       };
+      try {
+        localStorage.setItem('depotel_cached_db', JSON.stringify(updated));
+      } catch (_) {}
+      return updated;
     });
+
+    const payload = {
+      userId: currentUser.id,
+      userRole: currentUser.role,
+      userName: currentUser.name,
+      updatedBy: currentUser.name,
+      targetChecked: newChecked,
+    };
 
     try {
       const res = await fetch(`/api/sites/${currentUpdateType.id}/${site.id}/toggle`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ updatedBy: currentUser?.name || 'Petugas' }),
+        body: JSON.stringify(payload),
       });
-      if (!res.ok) throw new Error('Toggle failed');
-      showToast(!previousState ? `✅ ${site.siteCode} ditandai Sudah Tercentang!` : `❌ ${site.siteCode} ditandai Belum Tercentang!`);
-    } catch (err) {
+
+      if (!res.ok) {
+        const errJson = await res.json().catch(() => ({}));
+        throw new Error(errJson.error || 'Gagal mengubah status');
+      }
+
+      const json = await res.json();
+      if (json.site) {
+        setData((prev) => {
+          if (!prev) return prev;
+          const updated = {
+            ...prev,
+            updateTypes: prev.updateTypes.map((ut) => {
+              if (ut.id !== currentUpdateType.id) return ut;
+              return {
+                ...ut,
+                sites: ut.sites.map((s) => (s.id === site.id ? { ...s, ...json.site } : s)),
+              };
+            }),
+          };
+          try {
+            localStorage.setItem('depotel_cached_db', JSON.stringify(updated));
+          } catch (_) {}
+          return updated;
+        });
+      }
+
+      showToast(newChecked ? `✅ ${site.siteCode} ditandai Sudah Tercentang!` : `❌ ${site.siteCode} ditandai Belum Tercentang!`);
+      // Re-fetch to keep counts and state strictly synced with backend
+      fetchData(true);
+    } catch (err: any) {
+      // Revert optimistic update on permission denial or error
+      if (navigator.onLine && err.message && !err.message.includes('Failed to fetch')) {
+        setData((prev) => {
+          if (!prev) return prev;
+          const reverted = {
+            ...prev,
+            updateTypes: prev.updateTypes.map((ut) => {
+              if (ut.id !== currentUpdateType.id) return ut;
+              return {
+                ...ut,
+                sites: ut.sites.map((s) => (s.id === site.id ? { ...s, checked: previousState } : s)),
+              };
+            }),
+          };
+          try {
+            localStorage.setItem('depotel_cached_db', JSON.stringify(reverted));
+          } catch (_) {}
+          return reverted;
+        });
+        showToast(err.message || 'Izin ditolak: Gagal menyimpan status');
+        return;
+      }
+
       // Offline fallback: queue action
       const queue = getOfflineQueue();
       const newAction: OfflineAction = {
@@ -511,13 +597,13 @@ export default function App() {
         type: 'toggle',
         typeId: currentUpdateType.id,
         siteId: site.id,
-        payload: { updatedBy: currentUser?.name || 'Petugas' },
+        payload,
         timestamp: Date.now(),
       };
       queue.push(newAction);
       saveOfflineQueue(queue);
       setOfflineQueueCount(queue.length);
-      showToast(`Tersimpan di antrean draft lokal (Offline). Menunggu internet untuk disinkronkan ke server.`);
+      showToast(`Tersimpan di antrean offline. Status akan disinkronkan saat terhubung kembali.`);
     }
   };
 

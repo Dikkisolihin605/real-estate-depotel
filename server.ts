@@ -54,35 +54,35 @@ function makeSite(id: string, customerId: string, siteCode: string, siteName: st
 const SITES_TOKEN: SiteItem[] = [
   makeSite('st_1', '547402150841', 'EPE134', 'GGLANGGARKEBAGUSANEMRSSIAGARAYAEASYMACRO', false),
   makeSite('st_2', '547402159954', 'EPE133', 'JLSIMANENORKEBAGUSANEMACRO', false),
-  makeSite('st_3', '541300722052', 'COC143', 'CMBTCIPINANGBUNDER', true),
-  makeSite('st_4', '544204835266', 'JKT640', 'SMPNGPDKOPI', true),
-  makeSite('st_5', '544104549801', 'EPE121', 'KEBONPALAKPMELAYUEMACRO', true),
+  makeSite('st_3', '541300722052', 'COC143', 'CMBTCIPINANGBUNDER', false),
+  makeSite('st_4', '544204835266', 'JKT640', 'SMPNGPDKOPI', false),
+  makeSite('st_5', '544104549801', 'EPE121', 'KEBONPALAKPMELAYUEMACRO', false),
   makeSite('st_6', '547402151453', 'EPE118', 'CIPEDAKDALAMSRENGSENGEMACRO', false),
-  makeSite('st_7', '544104493058', 'EPE105', 'JLKEBONPALA2EASYMACRO', true),
-  makeSite('st_8', '547202531409', 'EPE123', 'JLRAHAYU2KALISARIEMACRO', true),
-  makeSite('st_9', '547402040765', 'EPE101', 'BINCONDETEMACRO', true),
+  makeSite('st_7', '544104493058', 'EPE105', 'JLKEBONPALA2EASYMACRO', false),
+  makeSite('st_8', '547202531409', 'EPE123', 'JLRAHAYU2KALISARIEMACRO', false),
+  makeSite('st_9', '547402040765', 'EPE101', 'BINCONDETEMACRO', false),
   makeSite('st_10', '547402176096', 'EPE141', 'JLPEJATENBARAT2EMACRO', false),
   makeSite('st_11', '544205151195', 'EPE158', 'JLMENTENGPURNAMACAKUNGEMACRO', false),
   makeSite('st_12', '547402134366', 'EPE127', 'JLNUSAINDAHEMACRO', false),
   makeSite('st_13', '547402131207', 'EPE125', 'JLHAJIICANGEMACRO', false),
-  makeSite('st_14', '547104799792', 'EPE078', 'BATUAMPAREMACROODMT', true),
+  makeSite('st_14', '547104799792', 'EPE078', 'BATUAMPAREMACROODMT', false),
   makeSite('st_15', '543602512320', 'EPE066', 'PASARPONDOKLABUEMACRO', false),
-  makeSite('st_16', '547104987172', 'EPE130', 'KKPHALIMEMACRO', true),
-  makeSite('st_17', '547104989288', 'EPE162', 'JLKAMPUNGBARUHALIMEMACRO', true),
+  makeSite('st_16', '547104987172', 'EPE130', 'KKPHALIMEMACRO', false),
+  makeSite('st_17', '547104989288', 'EPE162', 'JLKAMPUNGBARUHALIMEMACRO', false),
   makeSite('st_18', '547202522340', 'EPE135', 'SMAN58EMACRO', false),
-  makeSite('st_19', '544205132920', 'EPE153', 'JLKAPUK3EMACRO', true),
-  makeSite('st_20', '544104486916', 'EPE100', 'GGCIPARAI10EMACRO', true),
-  makeSite('st_21', '544205151888', 'EPE149', 'JLLANGGARRAYAPDBAMBUEMACRO', true),
-  makeSite('st_22', '544205145232', 'EPE119', 'JLKELURAHANRAYADURENSAWITEMACRO', true),
-  makeSite('st_23', '541301866778', 'EPE122', 'JLPULONANGKAPULOGADUNGEMACRO', true),
+  makeSite('st_19', '544205132920', 'EPE153', 'JLKAPUK3EMACRO', false),
+  makeSite('st_20', '544104486916', 'EPE100', 'GGCIPARAI10EMACRO', false),
+  makeSite('st_21', '544205151888', 'EPE149', 'JLLANGGARRAYAPDBAMBUEMACRO', false),
+  makeSite('st_22', '544205145232', 'EPE119', 'JLKELURAHANRAYADURENSAWITEMACRO', false),
+  makeSite('st_23', '541301866778', 'EPE122', 'JLPULONANGKAPULOGADUNGEMACRO', false),
   makeSite('st_24', '547202543826', 'EPE124', 'GGHIDENGCILANGKAPEMACRO', false),
   makeSite('st_25', '547402134118', 'EPE156', 'JLPAGUJATENPOINT13EMACRO', false),
-  makeSite('st_26', '547104958661', 'EPE107', 'JLBATUBULATEMACRO', true),
+  makeSite('st_26', '547104958661', 'EPE107', 'JLBATUBULATEMACRO', false),
   makeSite('st_27', '547402145270', 'EPE132', 'JLCIKOKOBRTEMACRO', false),
   makeSite('st_28', '547402097726', 'EPE104', 'PANGADEGANPANCORANEMACRO', false),
   makeSite('st_29', '547401249697', 'JSX938', 'PANGADEGANTIMUR3', false),
   makeSite('st_30', '543105914221', 'EPE108', 'JLCIPETERAYAEMACRO', false),
-  makeSite('st_31', '514485849567', 'EPE111', 'DARULARQOMEASYMACRO-PTI', true),
+  makeSite('st_31', '514485849567', 'EPE111', 'DARULARQOMEASYMACRO-PTI', false),
 ];
 
 // 22 Sites from Prompt for "Update Swacam/Catat Meter DEPOTEL INNER"
@@ -97,18 +97,18 @@ const SITES_SWACAM: SiteItem[] = [
   makeSite('sw_8', '543201116256', 'JKS256', 'Highscopecdk', false),
   makeSite('sw_9', '547103987215', 'JKS724', 'Relocppplaza', false),
   makeSite('sw_10', '547104349912', 'JTX058', 'MayjensutoyoBTSH-TBG', false),
-  makeSite('sw_11', '547202398420', 'JTX375', 'HbainkelapaduawetanBTSH-TBG', true),
-  makeSite('sw_12', '547400953635', 'JSX400', 'PegadenganpancoranBTSH-TBG', true),
-  makeSite('sw_13', '547401128114', 'JSX857', 'Cakramulia', true),
-  makeSite('sw_14', '547401196862', 'JSX907', 'WismapsmBTSH-TBG', true),
-  makeSite('sw_15', '547402281737', 'EPE220', 'JSX947_JLMUSHOLLACILANDAKTIMUR', true),
-  makeSite('sw_16', '547401307653', 'JSX876', 'RssiagarayaBTSH-IFT', true),
-  makeSite('sw_17', '541300600873', 'JKP959', 'FLYOVERCEMPAKAPUTIHNSTEL', true),
-  makeSite('sw_18', '544104200460', 'JKT565', 'Rsmitrajtngr-DMT', true),
-  makeSite('sw_19', '541302061234', 'EPE286', 'JATINEGARALIOOLEG-TBG', true),
-  makeSite('sw_20', '541302092830', 'JKT590', 'RAWAMANGUN MUKA RELOC', true),
-  makeSite('sw_21', '547202678218', 'JTX121', 'JLBAMBUHITAMIBS-MCP', true),
-  makeSite('sw_22', '547402386338', 'JSX867', 'GANDARIA5 JAGAKARSA', true),
+  makeSite('sw_11', '547202398420', 'JTX375', 'HbainkelapaduawetanBTSH-TBG', false),
+  makeSite('sw_12', '547400953635', 'JSX400', 'PegadenganpancoranBTSH-TBG', false),
+  makeSite('sw_13', '547401128114', 'JSX857', 'Cakramulia', false),
+  makeSite('sw_14', '547401196862', 'JSX907', 'WismapsmBTSH-TBG', false),
+  makeSite('sw_15', '547402281737', 'EPE220', 'JSX947_JLMUSHOLLACILANDAKTIMUR', false),
+  makeSite('sw_16', '547401307653', 'JSX876', 'RssiagarayaBTSH-IFT', false),
+  makeSite('sw_17', '541300600873', 'JKP959', 'FLYOVERCEMPAKAPUTIHNSTEL', false),
+  makeSite('sw_18', '544104200460', 'JKT565', 'Rsmitrajtngr-DMT', false),
+  makeSite('sw_19', '541302061234', 'EPE286', 'JATINEGARALIOOLEG-TBG', false),
+  makeSite('sw_20', '541302092830', 'JKT590', 'RAWAMANGUN MUKA RELOC', false),
+  makeSite('sw_21', '547202678218', 'JTX121', 'JLBAMBUHITAMIBS-MCP', false),
+  makeSite('sw_22', '547402386338', 'JSX867', 'GANDARIA5 JAGAKARSA', false),
 ];
 
 // Sites for "Pengisian Token Listrik Manual - DEPOTEL"
@@ -249,6 +249,12 @@ function loadDB(): DatabaseSchema {
 function saveDB(db: DatabaseSchema) {
   try {
     fs.writeFileSync(DB_FILE, JSON.stringify(db, null, 2), 'utf-8');
+    const publicDataFile = path.resolve(__dirname, 'public', 'data', 'depotel_db.json');
+    const publicDataDir = path.dirname(publicDataFile);
+    if (!fs.existsSync(publicDataDir)) {
+      fs.mkdirSync(publicDataDir, { recursive: true });
+    }
+    fs.writeFileSync(publicDataFile, JSON.stringify(db, null, 2), 'utf-8');
   } catch (err) {
     console.error('Error saving DB:', err);
   }
@@ -311,22 +317,68 @@ app.post('/api/heartbeat', (req, res) => {
   res.json({ success: true, user, users: enrichUsersOnline(db.users) });
 });
 
-// 3. Toggle Site Checked status (✅ / ❌)
+// 3. Toggle / Set Site Checked status (✅ / ❌) with strict Backend Permission Check
 app.post('/api/sites/:typeId/:siteId/toggle', (req, res) => {
   const { typeId, siteId } = req.params;
-  const { updatedBy } = req.body;
-  const ut = db.updateTypes.find(t => t.id === typeId);
+  const { userId, userRole, userName, updatedBy, targetChecked } = req.body;
+
+  // Requirement 7: Pastikan hanya user dan admin yang memiliki izin yang dapat mengubah status.
+  // Terapkan pemeriksaan izin di backend, bukan hanya menyembunyikan ikon di frontend.
+  const nameToCheck = (userName || updatedBy || '').trim().toLowerCase();
+  const idToCheck = (userId || '').trim();
+
+  // Validate requester identity against database users and initial official list
+  const requester = db.users.find(
+    (u) =>
+      (idToCheck && u.id === idToCheck) ||
+      (nameToCheck && u.name.toLowerCase() === nameToCheck) ||
+      (nameToCheck && u.name.toLowerCase().includes(nameToCheck)) ||
+      (nameToCheck && nameToCheck.includes(u.name.toLowerCase().replace(' (admin)', '')))
+  );
+
+  const isOfficial = INITIAL_USERS.some(
+    (u) =>
+      (idToCheck && u.id === idToCheck) ||
+      (nameToCheck && u.name.toLowerCase() === nameToCheck) ||
+      (nameToCheck && u.name.toLowerCase().includes(nameToCheck)) ||
+      (nameToCheck && nameToCheck.includes(u.name.toLowerCase().replace(' (admin)', '')))
+  );
+
+  if (!requester && !isOfficial) {
+    return res.status(403).json({
+      error: 'Izin ditolak: Hanya anggota tim terdaftar (user dan admin) yang dapat mengubah status checklist.',
+    });
+  }
+
+  const role = requester?.role || (isOfficial ? (idToCheck === 'u_admin' ? 'admin' : 'user') : null);
+  if (role !== 'admin' && role !== 'user') {
+    return res.status(403).json({
+      error: 'Izin ditolak: Role pengguna tidak berwenang mengubah checklist.',
+    });
+  }
+
+  const ut = db.updateTypes.find((t) => t.id === typeId);
   if (!ut) return res.status(404).json({ error: 'Update type not found' });
 
-  const site = ut.sites.find(s => s.id === siteId);
+  const site = ut.sites.find((s) => s.id === siteId);
   if (!site) return res.status(404).json({ error: 'Site not found' });
 
-  site.checked = !site.checked;
-  site.updatedBy = updatedBy || 'Petugas';
+  // Requirement 2: Ubah status centang (✓) atau silang (✗)
+  if (typeof targetChecked === 'boolean') {
+    site.checked = targetChecked;
+  } else {
+    site.checked = !site.checked;
+  }
+
+  const actorName = requester?.name || userName || updatedBy || 'Petugas';
+  site.updatedBy = actorName;
   site.updatedAt = new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' });
+
+  // Requirement 3 & 4: Simpan ke database server bersama secara permanen
   saveDB(db);
 
-  res.json({ success: true, site, updateType: ut });
+  // Return updated site, updateType, and enriched users
+  res.json({ success: true, site, updateType: ut, db });
 });
 
 // 4. Update Token Number & Catatan
