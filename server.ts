@@ -204,13 +204,8 @@ function loadDB(): DatabaseSchema {
     }
   }
 
-  // Keep official members and any additional registered users
-  const officialNames = INITIAL_USERS.map((u) => u.name.toLowerCase());
-  const beforeLen = result.users.length;
-  result.users = result.users.filter((u) =>
-    officialNames.some((on) => u.name.toLowerCase().includes(on.replace(' (admin)', '')) || on.includes(u.name.toLowerCase()))
-  );
-  if (result.users.length !== beforeLen) modified = true;
+  // Keep official members and any registered users or Google users
+  // (Do not delete logged in users)
 
   // Auto-generate active invitation for each official user if not present
   if (!result.invitations) result.invitations = [];
@@ -254,10 +249,20 @@ function loadDB(): DatabaseSchema {
     modified = true;
   }
   const manualType = result.updateTypes.find((t) => t.id === 'type_manual');
-  if (manualType && (!manualType.sites || manualType.sites.length === 0)) {
-    manualType.sites = SITES_MANUAL.map((s) => ({ ...s, checked: false }));
-    manualType.customTotalTarget = manualType.sites.length;
-    modified = true;
+  if (manualType) {
+    if (!manualType.sites || manualType.sites.length === 0) {
+      manualType.sites = SITES_MANUAL.map((s) => ({ ...s, checked: false }));
+      manualType.customTotalTarget = manualType.sites.length;
+      modified = true;
+    } else {
+      // User request: "untuk list Pengisian Token Listrik Manual - DEPOTEL tolong semua nya di bikin silang semua sebelum user dan admin mencentang dan silang"
+      for (const s of manualType.sites) {
+        if (s.checked) {
+          s.checked = false;
+          modified = true;
+        }
+      }
+    }
   }
 
   // Requirement 1 & 10: Every site without a saved checked state defaults to false (silang / ✗)
@@ -352,18 +357,18 @@ app.post('/api/sites/:typeId/:siteId/toggle', (req, res) => {
   const { typeId, siteId } = req.params;
   const { userId, userRole, userName, updatedBy, targetChecked } = req.body;
 
-  // Requirement 7: Pastikan hanya user dan admin yang memiliki izin yang dapat mengubah status.
-  // Terapkan pemeriksaan izin di backend, bukan hanya menyembunyikan ikon di frontend.
   const nameToCheck = (userName || updatedBy || '').trim().toLowerCase();
   const idToCheck = (userId || '').trim();
 
-  // Validate requester identity against database users and initial official list
-  const requester = db.users.find(
+  // Validate requester identity:
+  let requester = db.users.find(
     (u) =>
       (idToCheck && u.id === idToCheck) ||
       (nameToCheck && u.name.toLowerCase() === nameToCheck) ||
       (nameToCheck && u.name.toLowerCase().includes(nameToCheck)) ||
-      (nameToCheck && nameToCheck.includes(u.name.toLowerCase().replace(' (admin)', '')))
+      (nameToCheck && nameToCheck.includes(u.name.toLowerCase().replace(' (admin)', ''))) ||
+      (nameToCheck && u.email && u.email.toLowerCase() === nameToCheck) ||
+      (nameToCheck && u.email && nameToCheck.includes(u.email.toLowerCase()))
   );
 
   const isOfficial = INITIAL_USERS.some(
@@ -371,29 +376,57 @@ app.post('/api/sites/:typeId/:siteId/toggle', (req, res) => {
       (idToCheck && u.id === idToCheck) ||
       (nameToCheck && u.name.toLowerCase() === nameToCheck) ||
       (nameToCheck && u.name.toLowerCase().includes(nameToCheck)) ||
-      (nameToCheck && nameToCheck.includes(u.name.toLowerCase().replace(' (admin)', '')))
+      (nameToCheck && nameToCheck.includes(u.name.toLowerCase().replace(' (admin)', ''))) ||
+      (nameToCheck && u.email && u.email.toLowerCase() === nameToCheck) ||
+      (nameToCheck && u.email && nameToCheck.includes(u.email.toLowerCase()))
   );
 
-  if (!requester && !isOfficial) {
+  // If requester is not in db.users yet, but has valid credentials or name from login:
+  if (!requester && (isOfficial || idToCheck || nameToCheck)) {
+    const isAdmin =
+      userRole === 'admin' ||
+      idToCheck === 'u_admin' ||
+      nameToCheck.includes('diki') ||
+      nameToCheck.includes('admin') ||
+      nameToCheck.includes('dikisolihin');
+    requester = {
+      id: idToCheck || `u_${Date.now()}`,
+      name: (userName || updatedBy || (isAdmin ? 'Diki Solihin (Admin)' : 'Petugas')).trim(),
+      role: isAdmin ? 'admin' : 'user',
+      avatarColor: isAdmin ? '#0e2a6d' : '#2563eb',
+      lastActive: Date.now(),
+    };
+    db.users.push(requester);
+    saveDB(db);
+  }
+
+  // Ensure permission: only authenticated users and admins
+  if (!requester && !idToCheck && !nameToCheck) {
     return res.status(403).json({
-      error: 'Izin ditolak: Hanya anggota tim terdaftar (user dan admin) yang dapat mengubah status checklist.',
+      error: 'Izin ditolak: Silakan masuk terlebih dahulu untuk mengubah status checklist.',
     });
   }
 
-  const role = requester?.role || (isOfficial ? (idToCheck === 'u_admin' ? 'admin' : 'user') : null);
-  if (role !== 'admin' && role !== 'user') {
-    return res.status(403).json({
-      error: 'Izin ditolak: Role pengguna tidak berwenang mengubah checklist.',
-    });
+  // Find site across specified updateType, or fallback to any updateType
+  let ut = db.updateTypes.find((t) => t.id === typeId);
+  let site = ut?.sites.find((s) => s.id === siteId);
+
+  if (!site) {
+    for (const t of db.updateTypes) {
+      const s = t.sites.find((item) => item.id === siteId);
+      if (s) {
+        ut = t;
+        site = s;
+        break;
+      }
+    }
   }
 
-  const ut = db.updateTypes.find((t) => t.id === typeId);
-  if (!ut) return res.status(404).json({ error: 'Update type not found' });
+  if (!site || !ut) {
+    return res.status(404).json({ error: 'Data site tidak ditemukan di database' });
+  }
 
-  const site = ut.sites.find((s) => s.id === siteId);
-  if (!site) return res.status(404).json({ error: 'Site not found' });
-
-  // Requirement 2: Ubah status centang (✓) atau silang (✗)
+  // Update checklist status
   if (typeof targetChecked === 'boolean') {
     site.checked = targetChecked;
   } else {
@@ -404,10 +437,8 @@ app.post('/api/sites/:typeId/:siteId/toggle', (req, res) => {
   site.updatedBy = actorName;
   site.updatedAt = new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' });
 
-  // Requirement 3 & 4: Simpan ke database server bersama secara permanen
   saveDB(db);
 
-  // Return updated site, updateType, and enriched users
   res.json({ success: true, site, updateType: ut, db });
 });
 

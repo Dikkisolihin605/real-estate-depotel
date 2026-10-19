@@ -7,7 +7,7 @@
       "name": "Diki Solihin (Admin)",
       "role": "admin",
       "avatarColor": "#0e2a6d",
-      "lastActive": 1792434270258,
+      "lastActive": 1792435919532,
       "email": "dikisolihin605@gmail.com"
     },
     {
@@ -91,8 +91,8 @@
           "checked": false,
           "tokenNumber": "",
           "photos": [],
-          "updatedBy": "Saddam",
-          "updatedAt": "20/10/2026, 01.24.37"
+          "updatedBy": "Diki Solihin (Admin)",
+          "updatedAt": "20/10/2026, 01.51.32"
         },
         {
           "id": "st_2",
@@ -408,8 +408,207 @@
       "name": "Update Swacam/Catat Meter - DEPOTEL",
       "period": "23-27 Oktober 2026",
       "iconType": "swacam",
-      "customTotalTarget": 0,
-      "sites": [],
+      "customTotalTarget": 22,
+      "sites": [
+        {
+          "id": "sw_1",
+          "customerId": "544203866651",
+          "siteCode": "JKT763",
+          "siteName": "Pulogebangterminal-DMT",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": []
+        },
+        {
+          "id": "sw_2",
+          "customerId": "544204061540",
+          "siteCode": "JTX152",
+          "siteName": "HAJIAHMADSTP",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": []
+        },
+        {
+          "id": "sw_3",
+          "customerId": "544204219515",
+          "siteCode": "JTX358",
+          "siteName": "Jlrayapik-DMT",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": []
+        },
+        {
+          "id": "sw_4",
+          "customerId": "547104488429",
+          "siteCode": "JTX265",
+          "siteName": "Taxiwayhalim-DMT",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": []
+        },
+        {
+          "id": "sw_5",
+          "customerId": "541300863386",
+          "siteCode": "JTX015",
+          "siteName": "Puloutara8BTSH-TBG",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": []
+        },
+        {
+          "id": "sw_6",
+          "customerId": "543105050106",
+          "siteCode": "JKS413",
+          "siteName": "Relocparadiso",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": []
+        },
+        {
+          "id": "sw_7",
+          "customerId": "543105233694",
+          "siteCode": "JSX442",
+          "siteName": "JLBANKDAGANGNEGARATBG",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": []
+        },
+        {
+          "id": "sw_8",
+          "customerId": "543201116256",
+          "siteCode": "JKS256",
+          "siteName": "Highscopecdk",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": []
+        },
+        {
+          "id": "sw_9",
+          "customerId": "547103987215",
+          "siteCode": "JKS724",
+          "siteName": "Relocppplaza",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": []
+        },
+        {
+          "id": "sw_10",
+          "customerId": "547104349912",
+          "siteCode": "JTX058",
+          "siteName": "MayjensutoyoBTSH-TBG",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": []
+        },
+        {
+          "id": "sw_11",
+          "customerId": "547202398420",
+          "siteCode": "JTX375",
+          "siteName": "HbainkelapaduawetanBTSH-TBG",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": []
+        },
+        {
+          "id": "sw_12",
+          "customerId": "547400953635",
+          "siteCode": "JSX400",
+          "siteName": "PegadenganpancoranBTSH-TBG",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": []
+        },
+        {
+          "id": "sw_13",
+          "customerId": "547401128114",
+          "siteCode": "JSX857",
+          "siteName": "Cakramulia",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": []
+        },
+        {
+          "id": "sw_14",
+          "customerId": "547401196862",
+          "siteCode": "JSX907",
+          "siteName": "WismapsmBTSH-TBG",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": []
+        },
+        {
+          "id": "sw_15",
+          "customerId": "547402281737",
+          "siteCode": "EPE220",
+          "siteName": "JSX947_JLMUSHOLLACILANDAKTIMUR",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": []
+        },
+        {
+          "id": "sw_16",
+          "customerId": "547401307653",
+          "siteCode": "JSX876",
+          "siteName": "RssiagarayaBTSH-IFT",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": []
+        },
+        {
+          "id": "sw_17",
+          "customerId": "541300600873",
+          "siteCode": "JKP959",
+          "siteName": "FLYOVERCEMPAKAPUTIHNSTEL",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": []
+        },
+        {
+          "id": "sw_18",
+          "customerId": "544104200460",
+          "siteCode": "JKT565",
+          "siteName": "Rsmitrajtngr-DMT",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": []
+        },
+        {
+          "id": "sw_19",
+          "customerId": "541302061234",
+          "siteCode": "EPE286",
+          "siteName": "JATINEGARALIOOLEG-TBG",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": []
+        },
+        {
+          "id": "sw_20",
+          "customerId": "541302092830",
+          "siteCode": "JKT590",
+          "siteName": "RAWAMANGUN MUKA RELOC",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": []
+        },
+        {
+          "id": "sw_21",
+          "customerId": "547202678218",
+          "siteCode": "JTX121",
+          "siteName": "JLBAMBUHITAMIBS-MCP",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": []
+        },
+        {
+          "id": "sw_22",
+          "customerId": "547402386338",
+          "siteCode": "JSX867",
+          "siteName": "GANDARIA5 JAGAKARSA",
+          "checked": false,
+          "tokenNumber": "",
+          "photos": []
+        }
+      ],
       "createdAt": 1790403302138
     },
     {
@@ -427,8 +626,8 @@
           "checked": false,
           "tokenNumber": "0694-0057-9935-5566-9177\n4883-3281-0673-1088-7723\n4592-0662-1913-4727-4940",
           "photos": [],
-          "updatedBy": "Putri Takkira",
-          "updatedAt": "18/10/2026, 17.16.47"
+          "updatedBy": "Diki Solihin (Admin)",
+          "updatedAt": "20/10/2026, 01.52.01"
         },
         {
           "id": "st_man_2",
@@ -444,7 +643,7 @@
           "customerId": "541300936924",
           "siteCode": "JTX270",
           "siteName": "KEBEMBEMPULOGADUNG",
-          "checked": true,
+          "checked": false,
           "tokenNumber": "1662-9428-8705-0034-1303\n2707-7092-8863-8300-2428",
           "photos": [],
           "updatedBy": "Putri Takkira",

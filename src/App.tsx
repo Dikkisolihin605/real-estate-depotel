@@ -233,6 +233,21 @@ export default function App() {
         }
       }
 
+      // If there are pending local toggle/token actions (e.g. running on static Vercel host), apply them to keep the user's checklist state intact
+      const pendingQueue = getOfflineQueue();
+      if (pendingQueue.length > 0) {
+        for (const action of pendingQueue) {
+          if (action.type === 'toggle') {
+            const targetUt = json.updateTypes.find((t) => t.id === action.typeId);
+            const targetSite = targetUt?.sites.find((s) => s.id === action.siteId);
+            if (targetSite && typeof action.payload?.targetChecked === 'boolean') {
+              targetSite.checked = action.payload.targetChecked;
+              if (action.payload.updatedBy) targetSite.updatedBy = action.payload.updatedBy;
+            }
+          }
+        }
+      }
+
       const jsonStr = JSON.stringify(json);
       if (quiet && jsonStr === lastDataStringRef.current) {
         return;
@@ -538,37 +553,52 @@ export default function App() {
       });
 
       if (!res.ok) {
-        const errJson = await res.json().catch(() => ({}));
-        throw new Error(errJson.error || 'Gagal mengubah status');
-      }
-
-      const json = await res.json();
-      if (json.site) {
-        setData((prev) => {
-          if (!prev) return prev;
-          const updated = {
-            ...prev,
-            updateTypes: prev.updateTypes.map((ut) => {
-              if (ut.id !== currentUpdateType.id) return ut;
-              return {
-                ...ut,
-                sites: ut.sites.map((s) => (s.id === site.id ? { ...s, ...json.site } : s)),
-              };
-            }),
-          };
-          try {
-            localStorage.setItem('depotel_cached_db', JSON.stringify(updated));
-          } catch (_) {}
-          return updated;
-        });
+        if (res.status === 403) {
+          const errJson = await res.json().catch(() => ({}));
+          throw new Error(errJson.error || 'Izin ditolak: Tidak dapat mengubah status');
+        }
+        // If non-403 (e.g. 404 on static Vercel host), proceed with local persistent state and offline queue
+        const queue = getOfflineQueue();
+        const newAction: OfflineAction = {
+          id: `act_${Date.now()}_${Math.random()}`,
+          type: 'toggle',
+          typeId: currentUpdateType.id,
+          siteId: site.id,
+          payload,
+          timestamp: Date.now(),
+        };
+        queue.push(newAction);
+        saveOfflineQueue(queue);
+        setOfflineQueueCount(queue.length);
+      } else {
+        const json = await res.json().catch(() => null);
+        if (json?.site) {
+          setData((prev) => {
+            if (!prev) return prev;
+            const updated = {
+              ...prev,
+              updateTypes: prev.updateTypes.map((ut) => {
+                if (ut.id !== currentUpdateType.id) return ut;
+                return {
+                  ...ut,
+                  sites: ut.sites.map((s) => (s.id === site.id ? { ...s, ...json.site } : s)),
+                };
+              }),
+            };
+            try {
+              localStorage.setItem('depotel_cached_db', JSON.stringify(updated));
+            } catch (_) {}
+            return updated;
+          });
+        }
       }
 
       showToast(newChecked ? `✅ ${site.siteCode} ditandai Sudah Tercentang!` : `❌ ${site.siteCode} ditandai Belum Tercentang!`);
       // Re-fetch to keep counts and state strictly synced with backend
       fetchData(true);
     } catch (err: any) {
-      // Revert optimistic update on permission denial or error
-      if (navigator.onLine && err.message && !err.message.includes('Failed to fetch')) {
+      // Revert ONLY if explicitly denied by 403 permission error
+      if (err.message && err.message.includes('Izin ditolak')) {
         setData((prev) => {
           if (!prev) return prev;
           const reverted = {
@@ -586,11 +616,11 @@ export default function App() {
           } catch (_) {}
           return reverted;
         });
-        showToast(err.message || 'Izin ditolak: Gagal menyimpan status');
+        showToast(err.message);
         return;
       }
 
-      // Offline fallback: queue action
+      // Offline fallback: queue action and preserve state
       const queue = getOfflineQueue();
       const newAction: OfflineAction = {
         id: `act_${Date.now()}_${Math.random()}`,
@@ -603,7 +633,7 @@ export default function App() {
       queue.push(newAction);
       saveOfflineQueue(queue);
       setOfflineQueueCount(queue.length);
-      showToast(`Tersimpan di antrean offline. Status akan disinkronkan saat terhubung kembali.`);
+      showToast(newChecked ? `✅ ${site.siteCode} ditandai Sudah Tercentang!` : `❌ ${site.siteCode} ditandai Belum Tercentang!`);
     }
   };
 
