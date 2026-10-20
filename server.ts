@@ -55,35 +55,35 @@ function makeSite(id: string, customerId: string, siteCode: string, siteName: st
 const SITES_TOKEN: SiteItem[] = [
   makeSite('st_1', '547402150841', 'EPE134', 'GGLANGGARKEBAGUSANEMRSSIAGARAYAEASYMACRO', false),
   makeSite('st_2', '547402159954', 'EPE133', 'JLSIMANENORKEBAGUSANEMACRO', false),
-  makeSite('st_3', '541300722052', 'COC143', 'CMBTCIPINANGBUNDER', false),
+  makeSite('st_3', '541300722052', 'COC143', 'COMBATCIPINANGBUNDER', false),
   makeSite('st_4', '544204835266', 'JKT640', 'SMPNGPDKOPI', false),
-  makeSite('st_5', '544104549801', 'EPE121', 'KEBONPALAKPMELAYUEMACRO', false),
+  makeSite('st_5', '544104549801', 'EPE121', 'KEBONPALAKPMELAYUEMACRO', true),
   makeSite('st_6', '547402151453', 'EPE118', 'CIPEDAKDALAMSRENGSENGEMACRO', false),
-  makeSite('st_7', '544104493058', 'EPE105', 'JLKEBONPALA2EASYMACRO', false),
-  makeSite('st_8', '547202531409', 'EPE123', 'JLRAHAYU2KALISARIEMACRO', false),
-  makeSite('st_9', '547402040765', 'EPE101', 'BINCONDETEMACRO', false),
+  makeSite('st_7', '544104493058', 'EPE105', 'JLKEBONPALA2EASYMACRO', true),
+  makeSite('st_8', '547202531409', 'EPE123', 'JLRAHAYU2KALISARIEMACRO', true),
+  makeSite('st_9', '547402040765', 'EPE101', 'BINCONDETEMACRO', true),
   makeSite('st_10', '547402176096', 'EPE141', 'JLPEJATENBARAT2EMACRO', false),
   makeSite('st_11', '544205151195', 'EPE158', 'JLMENTENGPURNAMACAKUNGEMACRO', false),
   makeSite('st_12', '547402134366', 'EPE127', 'JLNUSAINDAHEMACRO', false),
   makeSite('st_13', '547402131207', 'EPE125', 'JLHAJIICANGEMACRO', false),
-  makeSite('st_14', '547104799792', 'EPE078', 'BATUAMPAREMACROODMT', false),
+  makeSite('st_14', '547104799792', 'EPE078', 'BATUAMPAREMACROODMT', true),
   makeSite('st_15', '543602512320', 'EPE066', 'PASARPONDOKLABUEMACRO', false),
-  makeSite('st_16', '547104987172', 'EPE130', 'KKPHALIMEMACRO', false),
-  makeSite('st_17', '547104989288', 'EPE162', 'JLKAMPUNGBARUHALIMEMACRO', false),
+  makeSite('st_16', '547104987172', 'EPE130', 'KKPHALIMEMACRO', true),
+  makeSite('st_17', '547104989288', 'EPE162', 'JLKAMPUNGBARUHALIMEMACRO', true),
   makeSite('st_18', '547202522340', 'EPE135', 'SMAN58EMACRO', false),
-  makeSite('st_19', '544205132920', 'EPE153', 'JLKAPUK3EMACRO', false),
-  makeSite('st_20', '544104486916', 'EPE100', 'GGCIPARAI10EMACRO', false),
-  makeSite('st_21', '544205151888', 'EPE149', 'JLLANGGARRAYAPDBAMBUEMACRO', false),
-  makeSite('st_22', '544205145232', 'EPE119', 'JLKELURAHANRAYADURENSAWITEMACRO', false),
-  makeSite('st_23', '541301866778', 'EPE122', 'JLPULONANGKAPULOGADUNGEMACRO', false),
+  makeSite('st_19', '544205132920', 'EPE153', 'JLKAPUK3EMACRO', true),
+  makeSite('st_20', '544104486916', 'EPE100', 'GGCIPARAI10EMACRO', true),
+  makeSite('st_21', '544205151888', 'EPE149', 'JLLANGGARRAYAPDBAMBUEMACRO', true),
+  makeSite('st_22', '544205145232', 'EPE119', 'JLKELURAHANRAYADURENSAWITEMACRO', true),
+  makeSite('st_23', '541301866778', 'EPE122', 'JLPULONANGKAPULOGADUNGEMACRO', true),
   makeSite('st_24', '547202543826', 'EPE124', 'GGHIDENGCILANGKAPEMACRO', false),
   makeSite('st_25', '547402134118', 'EPE156', 'JLPAGUJATENPOINT13EMACRO', false),
-  makeSite('st_26', '547104958661', 'EPE107', 'JLBATUBULATEMACRO', false),
+  makeSite('st_26', '547104958661', 'EPE107', 'JLBATUBULATEMACRO', true),
   makeSite('st_27', '547402145270', 'EPE132', 'JLCIKOKOBRTEMACRO', false),
   makeSite('st_28', '547402097726', 'EPE104', 'PANGADEGANPANCORANEMACRO', false),
   makeSite('st_29', '547401249697', 'JSX938', 'PANGADEGANTIMUR3', false),
   makeSite('st_30', '543105914221', 'EPE108', 'JLCIPETERAYAEMACRO', false),
-  makeSite('st_31', '514485849567', 'EPE111', 'DARULARQOMEASYMACRO-PTI', false),
+  makeSite('st_31', '514485849567', 'EPE111', 'DARULARQOMEASYMACRO-PTI', true),
 ];
 
 // 22 Sites from Prompt for "Update Swacam/Catat Meter DEPOTEL INNER"
@@ -131,7 +131,7 @@ function getInitialDB(): DatabaseSchema {
     updateTypes: [
       {
         id: 'type_token',
-        name: 'Pengisian Token Listrik - DEPOTEL',
+        name: 'Pengisian Token Listrik SWFM - DEPOTEL',
         period: 'Bulan September 2026',
         iconType: 'token',
         customTotalTarget: 31,
@@ -238,10 +238,38 @@ function loadDB(): DatabaseSchema {
 
   // Ensure standard categories have their sites populated with default checked: false if empty
   const tokenType = result.updateTypes.find((t) => t.id === 'type_token');
-  if (tokenType && (!tokenType.sites || tokenType.sites.length === 0)) {
-    tokenType.sites = SITES_TOKEN.map((s) => ({ ...s, checked: false }));
-    tokenType.customTotalTarget = tokenType.sites.length;
-    modified = true;
+  if (tokenType) {
+    if (!tokenType.sites || tokenType.sites.length === 0) {
+      tokenType.sites = SITES_TOKEN.map((s) => ({ ...s }));
+      tokenType.customTotalTarget = tokenType.sites.length;
+      modified = true;
+    } else {
+      const existingSt3 = tokenType.sites.find((s) => s.customerId === '541300722052' || s.siteCode === 'COC143');
+      if (!existingSt3) {
+        const newSt3: SiteItem = {
+          id: 'st_3',
+          customerId: '541300722052',
+          siteCode: 'COC143',
+          siteName: 'COMBATCIPINANGBUNDER',
+          checked: false,
+          tokenNumber: '',
+          photos: [],
+        };
+        tokenType.sites.splice(2, 0, newSt3);
+        tokenType.customTotalTarget = tokenType.sites.length;
+        modified = true;
+      } else {
+        if (existingSt3.siteName !== 'COMBATCIPINANGBUNDER') {
+          existingSt3.siteName = 'COMBATCIPINANGBUNDER';
+          modified = true;
+        }
+        if (!existingSt3.checked && !existingSt3.tokenNumber && existingSt3.updatedBy) {
+          delete existingSt3.updatedBy;
+          delete existingSt3.updatedAt;
+          modified = true;
+        }
+      }
+    }
   }
   const swacamType = result.updateTypes.find((t) => t.id === 'type_swacam');
   if (swacamType && (!swacamType.sites || swacamType.sites.length === 0)) {
@@ -250,20 +278,10 @@ function loadDB(): DatabaseSchema {
     modified = true;
   }
   const manualType = result.updateTypes.find((t) => t.id === 'type_manual');
-  if (manualType) {
-    if (!manualType.sites || manualType.sites.length === 0) {
-      manualType.sites = SITES_MANUAL.map((s) => ({ ...s, checked: false }));
-      manualType.customTotalTarget = manualType.sites.length;
-      modified = true;
-    } else {
-      // User request: "untuk list Pengisian Token Listrik Manual - DEPOTEL tolong semua nya di bikin silang semua sebelum user dan admin mencentang dan silang"
-      for (const s of manualType.sites) {
-        if (s.checked) {
-          s.checked = false;
-          modified = true;
-        }
-      }
-    }
+  if (manualType && (!manualType.sites || manualType.sites.length === 0)) {
+    manualType.sites = SITES_MANUAL.map((s) => ({ ...s, checked: false }));
+    manualType.customTotalTarget = manualType.sites.length;
+    modified = true;
   }
 
   // Requirement 1 & 10: Every site without a saved checked state defaults to false (silang / ✗)
@@ -421,8 +439,8 @@ app.post('/api/heartbeat', (req, res) => {
       lastActive: Date.now()
     };
     db.users.push(user);
+    saveDB(db);
   }
-  saveDB(db);
   res.json({ success: true, user, users: enrichUsersOnline(db.users) });
 });
 
@@ -798,6 +816,132 @@ app.post('/api/auth/google', (req, res) => {
 
   saveDB(db);
   res.json({ success: true, user, users: enrichUsersOnline(db.users) });
+});
+
+// 13c. Google Sheets Database Migration Endpoint
+app.post('/api/sheets/migrate', async (req, res) => {
+  const token = (req.headers.authorization?.replace(/^Bearer\s+/i, '') || req.body?.accessToken || '').trim();
+  if (!token) {
+    return res.status(401).json({ error: 'Access token Google Sheets diperlukan' });
+  }
+
+  const SPREADSHEET_ID = '1nQEuYD9N_WbyBW0MZEUeMjEJwm4trjKEQyR01vmWe0c';
+  try {
+    const metaRes = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    if (!metaRes.ok) {
+      const errText = await metaRes.text().catch(() => '');
+      return res.status(metaRes.status).json({ error: `Gagal mengakses Google Sheet: ${errText}` });
+    }
+    const metaJson = await metaRes.json();
+    const existingTitles = new Set((metaJson.sheets || []).map((s: any) => s.properties?.title));
+
+    const REQUIRED_SHEETS = ['SITES_MONITORING', 'CATEGORIES', 'USERS', 'INVITATIONS', 'RAW_JSON_BACKUP'];
+    const addRequests: any[] = [];
+    for (const title of REQUIRED_SHEETS) {
+      if (!existingTitles.has(title)) {
+        addRequests.push({
+          addSheet: { properties: { title, gridProperties: { rowCount: 1000, columnCount: 15 } } }
+        });
+      }
+    }
+    if (addRequests.length > 0) {
+      await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}:batchUpdate`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ requests: addRequests })
+      });
+    }
+
+    const sitesRows: any[][] = [
+      ['NO', 'KATEGORI ID', 'NAMA KATEGORI', 'SITE ID', 'ID PELANGGAN (CUSTOMER ID)', 'KODE SITE', 'NAMA SITE', 'STATUS CHECKLIST', 'STATUS BOOLEAN', 'NOMOR TOKEN LISTRIK', 'JUMLAH FOTO', 'TERAKHIR DIUBAH OLEH', 'WAKTU PEMBARUAN']
+    ];
+    let siteIdx = 1;
+    for (const ut of db.updateTypes || []) {
+      for (const s of ut.sites || []) {
+        sitesRows.push([
+          siteIdx++, ut.id, ut.name, s.id, s.customerId, s.siteCode, s.siteName,
+          s.checked ? 'SELESAI (✓)' : 'BELUM (✗)', s.checked ? 'TRUE' : 'FALSE',
+          s.tokenNumber || '', s.photos?.length || 0, s.updatedBy || '', s.updatedAt || ''
+        ]);
+      }
+    }
+
+    const categoryRows: any[][] = [
+      ['NO', 'KATEGORI ID', 'NAMA KATEGORI', 'PERIODE', 'TIPE IKON', 'TARGET TOTAL SITE', 'SITE TERDAFTAR', 'SELESAI (✓)', 'BELUM SELESAI (✗)', 'PERSENTASE PROGRES']
+    ];
+    let catIdx = 1;
+    for (const ut of db.updateTypes || []) {
+      const total = ut.customTotalTarget || ut.sites?.length || 0;
+      const checked = (ut.sites || []).filter(s => s.checked).length;
+      const unchecked = Math.max(0, total - checked);
+      const pct = total > 0 ? `${((checked / total) * 100).toFixed(2).replace('.', ',')}%` : '0%';
+      categoryRows.push([catIdx++, ut.id, ut.name, ut.period || '', ut.iconType || '', total, ut.sites?.length || 0, checked, unchecked, pct]);
+    }
+
+    const userRows: any[][] = [
+      ['NO', 'USER ID', 'NAMA PENGGUNA', 'ROLE / HAK AKSES', 'EMAIL RESMI', 'WARNA AVATAR', 'STATUS ONLINE', 'TERAKHIR AKTIF']
+    ];
+    let userIdx = 1;
+    for (const u of db.users || []) {
+      userRows.push([
+        userIdx++, u.id, u.name, u.role === 'admin' ? 'Admin' : 'Teknisi (User)', u.email || '',
+        u.avatarColor || '', u.isOnline ? 'Online' : 'Offline',
+        u.lastActive ? new Date(u.lastActive).toISOString() : ''
+      ]);
+    }
+
+    const invRows: any[][] = [
+      ['NO', 'ID UNDANGAN', 'KODE AKTIVASI', 'NAMA ANGGOTA', 'EMAIL ANGGOTA', 'ROLE', 'STATUS UNDANGAN', 'DIUNDANG OLEH', 'TANGGAL DIBUAT', 'TANGGAL KADALUARSA', 'USER ID TERHUBUNG']
+    ];
+    let invIdx = 1;
+    for (const inv of db.invitations || []) {
+      invRows.push([
+        invIdx++, inv.id, inv.code || '', inv.name, inv.email || '', inv.role, inv.status,
+        inv.invitedBy || '', inv.createdAt ? new Date(inv.createdAt).toISOString() : '',
+        inv.expiresAt ? new Date(inv.expiresAt).toISOString() : '', inv.acceptedUserId || ''
+      ]);
+    }
+
+    const backupRows: any[][] = [
+      ['TIMESTAMP EXPORT', 'WAKTU LOKAL (WIB)', 'TOTAL SITE', 'TOTAL USER', 'PAYLOAD JSON DATABASE LENGKAP'],
+      [new Date().toISOString(), new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' }), sitesRows.length - 1, userRows.length - 1, JSON.stringify(db)]
+    ];
+
+    const dataValuesPayload = [
+      { range: 'SITES_MONITORING!A1:M1000', values: sitesRows },
+      { range: 'CATEGORIES!A1:J100', values: categoryRows },
+      { range: 'USERS!A1:H100', values: userRows },
+      { range: 'INVITATIONS!A1:K100', values: invRows },
+      { range: 'RAW_JSON_BACKUP!A1:E2', values: backupRows },
+    ];
+
+    for (const item of dataValuesPayload) {
+      try {
+        await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${encodeURIComponent(item.range)}:clear`, {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}` }
+        });
+      } catch (_) {}
+    }
+
+    const updateRes = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values:batchUpdate`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ valueInputOption: 'USER_ENTERED', data: dataValuesPayload })
+    });
+
+    if (!updateRes.ok) {
+      const errText = await updateRes.text().catch(() => '');
+      return res.status(updateRes.status).json({ error: `Gagal update values: ${errText}` });
+    }
+
+    res.json({ success: true, totalRows: sitesRows.length - 1, sheetsUpdated: REQUIRED_SHEETS });
+  } catch (err: any) {
+    console.error('Server sheets migration error:', err);
+    res.status(500).json({ error: err.message || 'Gagal memindahkan data ke Google Sheet' });
+  }
 });
 
 // 14. Update User Role, Name, Email & Avatar Profile

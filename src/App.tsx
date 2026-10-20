@@ -28,6 +28,9 @@ import { AddSiteModal } from './components/AddSiteModal';
 import { InviteTeamModal } from './components/InviteTeamModal';
 import { InvitationActivationModal } from './components/InvitationActivationModal';
 import { PublishModal } from './components/PublishModal';
+import { GoogleSheetsSyncModal } from './components/GoogleSheetsSyncModal';
+import { updateSingleSiteInSheet } from './services/googleSheets';
+import { initAuth } from './firebase';
 import { OFFICIAL_TEAM_USERS, getDefaultClientDB } from './initialData';
 
 interface OfflineAction {
@@ -79,6 +82,24 @@ export default function App() {
               parsed.users.push({ ...offUser });
             }
           }
+          const tokenUt = parsed.updateTypes?.find((t) => t.id === 'type_token');
+          if (tokenUt) {
+            const existingSt3 = tokenUt.sites.find((s) => s.customerId === '541300722052' || s.siteCode === 'COC143');
+            if (!existingSt3) {
+              tokenUt.sites.splice(2, 0, {
+                id: 'st_3',
+                customerId: '541300722052',
+                siteCode: 'COC143',
+                siteName: 'COMBATCIPINANGBUNDER',
+                checked: false,
+                tokenNumber: '',
+                photos: [],
+              });
+              tokenUt.customTotalTarget = tokenUt.sites.length;
+            } else {
+              existingSt3.siteName = 'COMBATCIPINANGBUNDER';
+            }
+          }
           return parsed;
         }
       }
@@ -87,6 +108,8 @@ export default function App() {
   });
   const [activeTypeId, setActiveTypeId] = useState<string>('type_token');
   const [currentView, setCurrentView] = useState<'dashboard' | 'monitoring'>('dashboard');
+  const [liveStatus, setLiveStatus] = useState<'connecting' | 'connected' | 'disconnected'>('connecting');
+  const [lastSyncedAt, setLastSyncedAt] = useState<string>(() => new Date().toLocaleTimeString('id-ID'));
   
   // Synchronously restore user session on mount so page refresh never resets to login
   const [currentUser, setCurrentUser] = useState<AppUser | null>(() => {
@@ -139,6 +162,8 @@ export default function App() {
   const [isWhatsAppModalOpen, setIsWhatsAppModalOpen] = useState(false);
   const [isAddSiteModalOpen, setIsAddSiteModalOpen] = useState(false);
   const [isNewUpdateTypeModalOpen, setIsNewUpdateTypeModalOpen] = useState(false);
+  const [isSheetsModalOpen, setIsSheetsModalOpen] = useState(false);
+  const [googleAccessToken, setGoogleAccessToken] = useState<string | null>(null);
   const [editingPeriod, setEditingPeriod] = useState<UpdateType | null>(null);
 
   // In-app deletion confirmation states (eliminates iframe-blocked window.confirm)
@@ -259,20 +284,28 @@ export default function App() {
         }
       } catch (_) {}
 
-      // If there are pending local toggle/token actions (e.g. running on static Vercel host), apply them to keep the user's checklist state intact
-      const pendingQueue = getOfflineQueue();
-      if (pendingQueue.length > 0) {
-        for (const action of pendingQueue) {
-          if (action.type === 'toggle') {
-            const targetUt = json.updateTypes.find((t) => t.id === action.typeId);
-            const targetSite = targetUt?.sites.find((s) => s.id === action.siteId);
-            if (targetSite && typeof action.payload?.targetChecked === 'boolean') {
-              targetSite.checked = action.payload.targetChecked;
-              if (action.payload.updatedBy) targetSite.updatedBy = action.payload.updatedBy;
-            }
-          }
+      // Ensure st_3 (541300722052 COC143 COMBATCIPINANGBUNDER) is present at baris ke-3 (index 2) in type_token
+      const tokenUt = json.updateTypes?.find((t) => t.id === 'type_token');
+      if (tokenUt) {
+        const existingSt3 = tokenUt.sites.find((s) => s.customerId === '541300722052' || s.siteCode === 'COC143');
+        if (!existingSt3) {
+          tokenUt.sites.splice(2, 0, {
+            id: 'st_3',
+            customerId: '541300722052',
+            siteCode: 'COC143',
+            siteName: 'COMBATCIPINANGBUNDER',
+            checked: false,
+            tokenNumber: '',
+            photos: [],
+          });
+          tokenUt.customTotalTarget = tokenUt.sites.length;
+        } else {
+          existingSt3.siteName = 'COMBATCIPINANGBUNDER';
         }
       }
+
+      setLiveStatus('connected');
+      setLastSyncedAt(new Date().toLocaleTimeString('id-ID'));
 
       const jsonStr = JSON.stringify(json);
       if (quiet && jsonStr === lastDataStringRef.current) {
@@ -601,6 +634,21 @@ export default function App() {
     };
   }, [currentUser, fetchData]);
 
+  // 3. Listen for Firebase Google Auth token with Google Sheets access
+  useEffect(() => {
+    const unsub = initAuth(
+      (_user, token) => {
+        setGoogleAccessToken(token);
+      },
+      () => {
+        setGoogleAccessToken(null);
+      }
+    );
+    return () => {
+      if (typeof unsub === 'function') unsub();
+    };
+  }, []);
+
   // Pull to refresh handler
   const handlePullRefresh = async () => {
     await fetchData(false);
@@ -729,6 +777,10 @@ export default function App() {
             } catch (_) {}
             return updated;
           });
+
+          if (googleAccessToken) {
+            updateSingleSiteInSheet(googleAccessToken, json.site).catch(() => {});
+          }
         }
       }
 
@@ -790,7 +842,7 @@ export default function App() {
     if (!currentUpdateType || !activeEditSite) return;
 
     try {
-      const res = await fetch(`/api/sites/${currentUpdateType.id}/${activeEditSite.id}`, {
+      const res = await fetch(getApiUrl(`/api/sites/${currentUpdateType.id}/${activeEditSite.id}`), {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ customerId, siteCode, siteName, checked }),
@@ -837,7 +889,7 @@ export default function App() {
     showToast(`Site ${site.siteCode} berhasil dihapus`);
 
     try {
-      const res = await fetch(`/api/sites/${typeId}/${site.id}`, {
+      const res = await fetch(getApiUrl(`/api/sites/${typeId}/${site.id}`), {
         method: 'DELETE',
       });
       if (!res.ok) throw new Error('Delete failed');
@@ -870,7 +922,7 @@ export default function App() {
     showToast(`Nomor token site ${site.siteCode} berhasil dihapus`);
 
     try {
-      const res = await fetch(`/api/sites/${currentUpdateType.id}/${site.id}/token`, {
+      const res = await fetch(getApiUrl(`/api/sites/${currentUpdateType.id}/${site.id}/token`), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -935,7 +987,7 @@ export default function App() {
     });
 
     try {
-      const res = await fetch(`/api/sites/${currentUpdateType.id}/${activeTokenSite.id}/token`, {
+      const res = await fetch(getApiUrl(`/api/sites/${currentUpdateType.id}/${activeTokenSite.id}/token`), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -1493,6 +1545,7 @@ export default function App() {
             onOpenSettingsModal={() => setIsSettingsModalOpen(true)}
             onOpenLoginModal={() => setIsLoginModalOpen(true)}
             onOpenPublishModal={() => setIsPublishModalOpen(true)}
+            onOpenSheetsModal={() => setIsSheetsModalOpen(true)}
           />
 
           {/* PWA Update Banner */}
@@ -1560,6 +1613,7 @@ export default function App() {
                 onOpenInviteModal={() => setIsInviteTeamModalOpen(true)}
                 onOpenNewPeriodModal={() => setIsNewUpdateTypeModalOpen(true)}
                 onOpenPublishModal={() => setIsPublishModalOpen(true)}
+                onOpenSheetsModal={() => setIsSheetsModalOpen(true)}
                 onEditPeriod={(ut) => setEditingPeriod(ut)}
                 onDeletePeriod={handleDeleteUpdateType}
               />
@@ -1612,10 +1666,11 @@ export default function App() {
                   </div>
                 ) : (
                   <div className="space-y-3">
-                    {filteredSites.map((site) => (
+                    {filteredSites.map((site, index) => (
                       <SiteCard
                         key={site.id}
                         site={site}
+                        rowNumber={index + 1}
                         typeId={currentUpdateType?.id || ''}
                         updateTypeName={currentUpdateType?.name || ''}
                         currentUser={currentUser}
@@ -1738,6 +1793,10 @@ export default function App() {
           onUpdateUser={handleUpdateUser}
           onDeleteUser={handleDeleteUser}
           onLogout={handleLogout}
+          onOpenSheetsModal={() => {
+            setIsSettingsModalOpen(false);
+            setIsSheetsModalOpen(true);
+          }}
         />
 
         <InviteTeamModal
@@ -1839,6 +1898,18 @@ export default function App() {
           onClose={() => setIsNewUpdateTypeModalOpen(false)}
           onAddUpdateType={handleAddUpdateType}
         />
+
+        {data && (
+          <GoogleSheetsSyncModal
+            isOpen={isSheetsModalOpen}
+            onClose={() => setIsSheetsModalOpen(false)}
+            db={data}
+            currentUser={currentUser}
+            googleAccessToken={googleAccessToken}
+            onTokenReceived={(token) => setGoogleAccessToken(token)}
+            onToast={showToast}
+          />
+        )}
         </div>
       </div>
     </PullToRefresh>

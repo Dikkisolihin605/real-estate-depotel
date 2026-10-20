@@ -10,6 +10,7 @@ import type { SiteItem, AppUser } from '../types';
 
 interface SiteCardProps {
   site: SiteItem;
+  rowNumber?: number;
   typeId: string;
   updateTypeName: string;
   currentUser: AppUser | null;
@@ -24,6 +25,7 @@ interface SiteCardProps {
 
 export const SiteCardComponent: React.FC<SiteCardProps> = ({
   site,
+  rowNumber,
   typeId: _typeId,
   updateTypeName,
   currentUser,
@@ -73,8 +75,14 @@ export const SiteCardComponent: React.FC<SiteCardProps> = ({
 
         {/* Center Details */}
         <div className="flex-1 min-w-0 space-y-1.5">
-          {/* Top Line: Customer ID + Site ID */}
+          {/* Top Line: Row Number Badge + Customer ID + Site ID */}
           <div className="flex flex-wrap items-center gap-2">
+            {rowNumber !== undefined && (
+              <span className="flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-xl bg-slate-900 font-mono text-xs sm:text-sm font-black text-white shadow-xs">
+                {rowNumber}
+              </span>
+            )}
+
             <span className="font-mono text-base sm:text-lg font-black text-slate-900 tracking-tight">
               {site.customerId || '-'}
             </span>
@@ -92,7 +100,7 @@ export const SiteCardComponent: React.FC<SiteCardProps> = ({
           </p>
 
           {/* Live Update Metadata: Shows who last checked/updated this site */}
-          {site.updatedBy && (
+          {(site.checked || site.tokenNumber || (site.photos && site.photos.length > 0)) && site.updatedBy && (
             <div className="flex flex-wrap items-center gap-1.5 text-[10px] sm:text-[11px] text-slate-500 font-medium">
               <span className="inline-flex items-center gap-1">
                 <span className={`h-1.5 w-1.5 rounded-full ${site.checked ? 'bg-emerald-500' : 'bg-slate-400'}`} />

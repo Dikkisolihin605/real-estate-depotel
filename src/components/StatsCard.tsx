@@ -19,11 +19,15 @@ interface StatsCardProps {
   onOpenWhatsAppModal: () => void;
   onOpenAddSiteModal: () => void;
   onBackToDashboard: () => void;
+  liveStatus?: 'connecting' | 'connected' | 'disconnected';
+  lastSyncedAt?: string;
 }
 
 export const StatsCard: React.FC<StatsCardProps> = ({
   updateType,
   currentUser,
+  liveStatus = 'connected',
+  lastSyncedAt,
   searchQuery,
   onSearchChange,
   statusFilter,
@@ -73,6 +77,35 @@ export const StatsCard: React.FC<StatsCardProps> = ({
           <ArrowLeft className="h-4 w-4" />
           <span>Kembali ke Dashboard</span>
         </button>
+      </div>
+
+      {/* Real-Time Live Status Banner as requested by user */}
+      <div className="flex flex-wrap items-center justify-between gap-2.5 rounded-2xl bg-white border border-slate-200/90 px-4 py-2.5 shadow-2xs">
+        <div className="flex items-center gap-2">
+          {liveStatus === 'connected' && (
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-xs font-black text-emerald-700 border border-emerald-300 shadow-2xs">
+              <span className="h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span>● LIVE — Real-Time Aktif</span>
+            </span>
+          )}
+          {liveStatus === 'connecting' && (
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-3 py-1 text-xs font-black text-amber-700 border border-amber-300 shadow-2xs">
+              <span className="h-2.5 w-2.5 rounded-full bg-amber-400 animate-ping" />
+              <span>◌ Menghubungkan...</span>
+            </span>
+          )}
+          {liveStatus === 'disconnected' && (
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-rose-50 px-3 py-1 text-xs font-black text-rose-700 border border-rose-300 shadow-2xs">
+              <span className="h-2.5 w-2.5 rounded-full bg-rose-500" />
+              <span>● OFFLINE / Koneksi Terputus</span>
+            </span>
+          )}
+        </div>
+        {lastSyncedAt && (
+          <span className="text-xs text-slate-500 font-medium">
+            Terakhir diperbarui: <strong className="text-slate-800 font-bold">{lastSyncedAt}</strong> WIB
+          </span>
+        )}
       </div>
 
       {/* Category Pill Tag */}

@@ -10,16 +10,21 @@ import {
   Copy,
   Send,
   Share2,
+  FileSpreadsheet,
+  ExternalLink,
 } from 'lucide-react';
 import type { UpdateType, AppUser } from '../types';
 
 interface DashboardOverviewProps {
   updateTypes: UpdateType[];
   currentUser: AppUser | null;
+  liveStatus?: 'connecting' | 'connected' | 'disconnected';
+  lastSyncedAt?: string;
   onSelectUpdateType: (id: string) => void;
   onOpenInviteModal: () => void;
   onOpenNewPeriodModal: () => void;
   onOpenPublishModal?: () => void;
+  onOpenSheetsModal?: () => void;
   onEditPeriod: (updateType: UpdateType) => void;
   onDeletePeriod: (id: string, name: string) => void;
 }
@@ -27,9 +32,12 @@ interface DashboardOverviewProps {
 export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
   updateTypes,
   currentUser,
+  liveStatus = 'connected',
+  lastSyncedAt,
   onSelectUpdateType,
   onOpenInviteModal,
   onOpenNewPeriodModal,
+  onOpenSheetsModal,
   onEditPeriod,
   onDeletePeriod,
 }) => {
@@ -102,6 +110,30 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
             <span className="rounded-full bg-blue-50 px-2.5 py-0.5 text-[11px] sm:text-xs font-black text-blue-700 uppercase border border-blue-200">
               STRIKER kWh
             </span>
+            <span className="inline-block h-1 w-1 rounded-full bg-slate-300" />
+            {liveStatus === 'connected' && (
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-0.5 text-[11px] font-black text-emerald-700 border border-emerald-300 shadow-2xs">
+                <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span>● LIVE — Real-Time Aktif</span>
+              </span>
+            )}
+            {liveStatus === 'connecting' && (
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-2.5 py-0.5 text-[11px] font-black text-amber-700 border border-amber-300 shadow-2xs">
+                <span className="h-2 w-2 rounded-full bg-amber-400 animate-ping" />
+                <span>◌ Menghubungkan...</span>
+              </span>
+            )}
+            {liveStatus === 'disconnected' && (
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-rose-50 px-2.5 py-0.5 text-[11px] font-black text-rose-700 border border-rose-300 shadow-2xs">
+                <span className="h-2 w-2 rounded-full bg-rose-500" />
+                <span>● OFFLINE / Terputus</span>
+              </span>
+            )}
+            {lastSyncedAt && (
+              <span className="text-[10px] text-slate-400 font-medium hidden sm:inline">
+                • {lastSyncedAt} WIB
+              </span>
+            )}
           </div>
 
           <h1 className="text-xl sm:text-2xl font-black tracking-tight text-slate-900 leading-snug">
@@ -190,6 +222,50 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
             >
               <Send className="h-4 w-4" />
               <span>WhatsApp</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {/* Google Sheet Integration & Migration Banner */}
+      <div className="rounded-3xl border border-emerald-300 bg-gradient-to-r from-emerald-50 via-teal-50/70 to-white p-4 sm:p-5 shadow-xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="space-y-1.5 min-w-0 flex-1">
+            <div className="flex items-center gap-2">
+              <FileSpreadsheet className="h-4 w-4 text-emerald-700 flex-shrink-0" />
+              <span className="text-xs font-black uppercase tracking-wider text-emerald-950">
+                Database Google Sheet Resmi:
+              </span>
+              <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-black text-emerald-800 border border-emerald-300">
+                1nQEuYD9N...
+              </span>
+            </div>
+            <p className="text-xs text-emerald-900 leading-relaxed">
+              Database tersambung dengan Google Sheet (5 Tab: <strong>SITES_MONITORING</strong>, <strong>CATEGORIES</strong>, <strong>USERS</strong>, <strong>INVITATIONS</strong>, <strong>RAW_JSON_BACKUP</strong>).
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2 flex-shrink-0">
+            {onOpenSheetsModal && (
+              <button
+                type="button"
+                onClick={onOpenSheetsModal}
+                className="flex items-center justify-center gap-1.5 rounded-xl bg-emerald-700 px-3.5 py-2.5 text-xs font-black text-white shadow-xs hover:bg-emerald-600 active:scale-95 transition cursor-pointer"
+              >
+                <FileSpreadsheet className="h-4 w-4" />
+                <span>Pindahkan / Sinkronkan</span>
+              </button>
+            )}
+
+            <a
+              href="https://docs.google.com/spreadsheets/d/1nQEuYD9N_WbyBW0MZEUeMjEJwm4trjKEQyR01vmWe0c/edit"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-1.5 rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-xs font-bold text-slate-800 shadow-xs hover:bg-slate-50 active:scale-95 transition cursor-pointer"
+              title="Buka Google Sheet di Tab Baru"
+            >
+              <ExternalLink className="h-4 w-4 text-slate-600" />
+              <span>Buka Sheet</span>
             </a>
           </div>
         </div>

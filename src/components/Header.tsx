@@ -1,5 +1,5 @@
 import React from 'react';
-import { Globe, User } from 'lucide-react';
+import { Globe, User, FileSpreadsheet } from 'lucide-react';
 import type { AppUser } from '../types';
 
 interface HeaderProps {
@@ -9,6 +9,9 @@ interface HeaderProps {
   onOpenSettingsModal: () => void;
   onOpenLoginModal: () => void;
   onOpenPublishModal: () => void;
+  onOpenSheetsModal?: () => void;
+  liveStatus?: 'connecting' | 'connected' | 'disconnected';
+  lastSyncedAt?: string;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -18,6 +21,9 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenSettingsModal,
   onOpenLoginModal,
   onOpenPublishModal,
+  onOpenSheetsModal,
+  liveStatus = 'connected',
+  lastSyncedAt,
 }) => {
   const onlineCount = users.filter((u) => u.isOnline).length;
   const isAdmin = currentUser?.role === 'admin';
@@ -54,9 +60,33 @@ export const Header: React.FC<HeaderProps> = ({
                 kWh
               </span>
             </div>
-            <p className="text-xs sm:text-sm font-semibold text-slate-500">
-              Update Token &amp; Swacam
-            </p>
+            
+            {/* Real-time connection status badge */}
+            <div className="flex items-center gap-2 pt-0.5">
+              {liveStatus === 'connected' && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] sm:text-[11px] font-black text-emerald-700 border border-emerald-200 shadow-2xs">
+                  <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <span>● LIVE — Real-Time Aktif</span>
+                </span>
+              )}
+              {liveStatus === 'connecting' && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-[10px] sm:text-[11px] font-black text-amber-700 border border-amber-200 shadow-2xs">
+                  <span className="h-2 w-2 rounded-full bg-amber-400 animate-ping" />
+                  <span>◌ Menghubungkan...</span>
+                </span>
+              )}
+              {liveStatus === 'disconnected' && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-rose-50 px-2 py-0.5 text-[10px] sm:text-[11px] font-black text-rose-700 border border-rose-200 shadow-2xs">
+                  <span className="h-2 w-2 rounded-full bg-rose-500" />
+                  <span>● OFFLINE / Terputus</span>
+                </span>
+              )}
+              {lastSyncedAt && (
+                <span className="hidden sm:inline text-[10px] text-slate-400 font-medium">
+                  • {lastSyncedAt}
+                </span>
+              )}
+            </div>
           </div>
         </div>
 
@@ -72,6 +102,19 @@ export const Header: React.FC<HeaderProps> = ({
             >
               <Globe className="h-4 w-4 text-blue-600 animate-pulse" />
               <span className="hidden xs:inline sm:inline">Publish</span>
+            </button>
+          )}
+
+          {/* Google Sheets Sync & Migration Button */}
+          {onOpenSheetsModal && (
+            <button
+              type="button"
+              onClick={onOpenSheetsModal}
+              className="flex items-center gap-1.5 rounded-xl border border-emerald-300 bg-gradient-to-r from-emerald-50 to-teal-50 px-2.5 py-1.5 sm:px-3 sm:py-2 text-xs font-black text-emerald-800 shadow-xs hover:border-emerald-400 hover:bg-emerald-100 active:scale-95 transition cursor-pointer"
+              title="Pindahkan / Sinkronkan Database ke Google Sheet"
+            >
+              <FileSpreadsheet className="h-4 w-4 text-emerald-600" />
+              <span className="hidden xs:inline sm:inline">Sheets</span>
             </button>
           )}
 

@@ -10,6 +10,7 @@ import {
   RotateCcw,
   Pencil,
   AlertTriangle,
+  FileSpreadsheet,
 } from 'lucide-react';
 import type { AppUser } from '../types';
 
@@ -24,6 +25,7 @@ interface AccountSettingsModalProps {
   onUpdateUser?: (userId: string, data: { name?: string; role?: 'admin' | 'user'; email?: string }) => Promise<void>;
   onDeleteUser: (userId: string) => Promise<void>;
   onLogout: () => void;
+  onOpenSheetsModal?: () => void;
 }
 
 export const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({
@@ -37,6 +39,7 @@ export const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({
   onUpdateUser,
   onDeleteUser,
   onLogout,
+  onOpenSheetsModal,
 }) => {
   const [newUserName, setNewUserName] = useState('');
   const [newUserRole, setNewUserRole] = useState<'admin' | 'user'>('user');
@@ -303,6 +306,46 @@ export const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({
               </div>
             </div>
           </div>
+
+          {/* Google Sheets Database Migration (Admin ONLY) */}
+          {isAdmin && onOpenSheetsModal && (
+            <div className="rounded-2xl border border-emerald-300 bg-gradient-to-r from-emerald-50 via-teal-50 to-white p-4 space-y-2.5">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <FileSpreadsheet className="h-4 w-4 text-emerald-700" />
+                  <h4 className="text-xs font-black uppercase tracking-wider text-emerald-950">
+                    Database Google Sheet (Resmi)
+                  </h4>
+                </div>
+                <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-black text-emerald-800 border border-emerald-300">
+                  Terhubung
+                </span>
+              </div>
+              <p className="text-xs text-emerald-900 leading-relaxed">
+                Pindahkan atau sinkronkan seluruh database dari <code className="bg-white/80 px-1 py-0.5 rounded text-emerald-950 font-bold border border-emerald-200">data/depotel_db.json</code> ke Google Sheet:
+                <br />
+                <span className="font-mono font-bold text-[11px] text-emerald-800 break-all">1nQEuYD9N_WbyBW0MZEUeMjEJwm4trjKEQyR01vmWe0c</span>
+              </p>
+              <div className="flex items-center gap-2 pt-1">
+                <button
+                  type="button"
+                  onClick={onOpenSheetsModal}
+                  className="flex items-center gap-1.5 rounded-xl bg-emerald-700 px-3.5 py-2 text-xs font-black text-white shadow-xs hover:bg-emerald-600 active:scale-95 transition cursor-pointer"
+                >
+                  <FileSpreadsheet className="h-4 w-4" />
+                  <span>Pindahkan / Sinkronkan Data</span>
+                </button>
+                <a
+                  href="https://docs.google.com/spreadsheets/d/1nQEuYD9N_WbyBW0MZEUeMjEJwm4trjKEQyR01vmWe0c/edit"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-3 py-2 text-xs font-bold text-slate-700 hover:bg-slate-50 transition"
+                >
+                  <span>Buka Sheet</span>
+                </a>
+              </div>
+            </div>
+          )}
 
           {/* Registered Users List & Add User Form (Admin ONLY - Hidden for User Account) */}
           {isAdmin && (
