@@ -84,9 +84,10 @@ export default function App() {
       if (cached) {
         const parsed: DatabaseSchema = JSON.parse(cached);
         if (parsed.users && parsed.users.length > 0) {
+          parsed.users = parsed.users.map((u) => ({ ...u, email: 'dikisolihin605@gmail.com' }));
           for (const offUser of OFFICIAL_TEAM_USERS) {
             if (!parsed.users.some((u) => u.id === offUser.id || u.name.toLowerCase() === offUser.name.toLowerCase())) {
-              parsed.users.push({ ...offUser });
+              parsed.users.push({ ...offUser, email: 'dikisolihin605@gmail.com' });
             }
           }
           const tokenUt = parsed.updateTypes?.find((t) => t.id === 'type_token');
@@ -124,7 +125,7 @@ export default function App() {
       const savedUserStr = localStorage.getItem('depotel_current_user');
       if (savedUserStr) {
         const parsed = JSON.parse(savedUserStr);
-        if (parsed && parsed.name) return parsed;
+        if (parsed && parsed.name) return { ...parsed, email: 'dikisolihin605@gmail.com' };
       }
       const savedUserId = localStorage.getItem('depotel_user_id');
       if (savedUserId) {
@@ -132,10 +133,10 @@ export default function App() {
         if (cached) {
           const db: DatabaseSchema = JSON.parse(cached);
           const found = db.users?.find((u) => u.id === savedUserId);
-          if (found) return found;
+          if (found) return { ...found, email: 'dikisolihin605@gmail.com' };
         }
         const offFound = OFFICIAL_TEAM_USERS.find((u) => u.id === savedUserId);
-        if (offFound) return offFound;
+        if (offFound) return { ...offFound, email: 'dikisolihin605@gmail.com' };
       }
     } catch (_) {}
     return null;
@@ -273,11 +274,11 @@ export default function App() {
         throw new Error('Server/static data unavailable');
       }
 
-      // Always guarantee that all 9 official users exist
+      // Always guarantee that all 9 official users exist with dikisolihin605@gmail.com
       if (!json.users) json.users = [];
       for (const offUser of OFFICIAL_TEAM_USERS) {
         if (!json.users.some((u) => u.id === offUser.id || u.name.toLowerCase() === offUser.name.toLowerCase())) {
-          json.users.push({ ...offUser });
+          json.users.push({ ...offUser, email: 'dikisolihin605@gmail.com' });
         }
       }
 
@@ -288,11 +289,17 @@ export default function App() {
           const customUsers: AppUser[] = JSON.parse(customUsersRaw);
           for (const cu of customUsers) {
             if (!json.users.some((u) => u.id === cu.id || u.name.toLowerCase() === cu.name.toLowerCase())) {
-              json.users.push(cu);
+              json.users.push({ ...cu, email: 'dikisolihin605@gmail.com' });
             }
           }
         }
       } catch (_) {}
+
+      // Enforce shared Gmail dikisolihin605@gmail.com across all user accounts
+      json.users = json.users.map((u) => ({
+        ...u,
+        email: 'dikisolihin605@gmail.com',
+      }));
 
       // Ensure st_3 (541300722052 COC143 COMBATCIPINANGBUNDER) is present at baris ke-3 (index 2) in type_token
       const tokenUt = json.updateTypes?.find((t) => t.id === 'type_token');
@@ -550,7 +557,7 @@ export default function App() {
     if (!newDb.users) newDb.users = [];
     for (const offUser of OFFICIAL_TEAM_USERS) {
       if (!newDb.users.some((u) => u.id === offUser.id || u.name.toLowerCase() === offUser.name.toLowerCase())) {
-        newDb.users.push({ ...offUser });
+        newDb.users.push({ ...offUser, email: 'dikisolihin605@gmail.com' });
       }
     }
     try {
@@ -559,11 +566,17 @@ export default function App() {
         const customUsers = JSON.parse(customUsersRaw);
         for (const cu of customUsers) {
           if (!newDb.users.some((u) => u.id === cu.id || u.name.toLowerCase() === cu.name.toLowerCase())) {
-            newDb.users.push(cu);
+            newDb.users.push({ ...cu, email: 'dikisolihin605@gmail.com' });
           }
         }
       }
     } catch (_) {}
+
+    // Enforce shared Gmail dikisolihin605@gmail.com across all user accounts
+    newDb.users = newDb.users.map((u) => ({
+      ...u,
+      email: 'dikisolihin605@gmail.com',
+    }));
 
     // Apply active in-flight toggles to prevent temporary flicker / race condition
     if (newDb.updateTypes) {

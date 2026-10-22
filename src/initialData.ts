@@ -175,7 +175,7 @@ export const CLIENT_INITIAL_INVITATIONS: TeamInvitation[] = OFFICIAL_TEAM_USERS.
   token: `token_${user.id}_depotel`,
   code: `DEP-40107${idx + 1}`,
   name: user.name,
-  email: user.email || `${user.name.toLowerCase().replace(/[\s()]/g, '')}@gmail.com`,
+  email: 'dikisolihin605@gmail.com',
   role: user.role,
   status: 'accepted',
   invitedBy: 'Admin DEPOTEL',

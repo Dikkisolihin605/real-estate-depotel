@@ -57,14 +57,14 @@ export const UserLoginModal: React.FC<UserLoginModalProps> = ({
 
   // Merge any custom users added by admin to ensure newly registered members are immediately available
   const allAvailableUsers = useMemo(() => {
-    const list = [...users];
+    const list = users.map((u) => ({ ...u, email: 'dikisolihin605@gmail.com' }));
     try {
       const customRaw = localStorage.getItem('depotel_custom_users');
       if (customRaw) {
         const customUsers: AppUser[] = JSON.parse(customRaw);
         for (const cu of customUsers) {
           if (!list.some((u) => u.id === cu.id || u.name.toLowerCase() === cu.name.toLowerCase())) {
-            list.push(cu);
+            list.push({ ...cu, email: 'dikisolihin605@gmail.com' });
           }
         }
       }
@@ -480,7 +480,7 @@ export const UserLoginModal: React.FC<UserLoginModalProps> = ({
                           </div>
                           <div className="text-[10px] text-slate-400 flex items-center justify-between gap-1.5 mt-0.5">
                             <span className="font-mono text-slate-400 truncate text-[10px]">
-                              {user.email || `${user.name.toLowerCase().replace(/\s+/g, '')}@gmail.com`}
+                              {user.email || 'dikisolihin605@gmail.com'}
                             </span>
                             <span className="text-[9px] text-slate-500 flex-shrink-0">
                               Terdaftar
