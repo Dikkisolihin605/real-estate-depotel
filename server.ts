@@ -24,18 +24,18 @@ if (!fs.existsSync(DATA_DIR)) {
   fs.mkdirSync(DATA_DIR, { recursive: true });
 }
 
-// Initial Team Users - 9 Official Team Members
+// Initial Team Users - 10 Official Team Members with shared Admin Gmail dikisolihin605@gmail.com
 const INITIAL_USERS: AppUser[] = [
   { id: 'u_admin', name: 'Diki Solihin (Admin)', role: 'admin', email: 'dikisolihin605@gmail.com', avatarColor: '#0e2a6d', lastActive: Date.now() },
-  { id: 'u_saddam', name: 'Saddam', role: 'user', email: 'saddam@gmail.com', avatarColor: '#10b981', lastActive: Date.now() - 60000 },
-  { id: 'u_kusnaedi', name: 'Kusnaedi', role: 'user', email: 'kusnaedi@gmail.com', avatarColor: '#3b82f6', lastActive: Date.now() - 120000 },
-  { id: 'u_samin', name: 'Samin', role: 'user', email: 'samin@gmail.com', avatarColor: '#14b8a6', lastActive: Date.now() - 180000 },
-  { id: 'u_junaedi', name: 'Junaedi', role: 'user', email: 'junaedi@gmail.com', avatarColor: '#06b6d4', lastActive: Date.now() - 240000 },
-  { id: 'u_randi', name: 'Randi', role: 'user', email: 'randi@gmail.com', avatarColor: '#6366f1', lastActive: Date.now() - 300000 },
-  { id: 'u_roy', name: 'Roy', role: 'user', email: 'roy@gmail.com', avatarColor: '#f97316', lastActive: Date.now() - 360000 },
-  { id: 'u_romi', name: 'Romi', role: 'user', email: 'romi@gmail.com', avatarColor: '#84cc16', lastActive: Date.now() - 420000 },
-  { id: 'u_kosasih', name: 'Kosasih', role: 'user', email: 'kosasih@gmail.com', avatarColor: '#0284c7', lastActive: Date.now() - 480000 },
-  { id: 'u_nasrul', name: 'Nasrul', role: 'user', email: 'nasrul@gmail.com', avatarColor: '#8b5cf6', lastActive: Date.now() - 540000 },
+  { id: 'u_saddam', name: 'Saddam', role: 'user', email: 'dikisolihin605@gmail.com', avatarColor: '#10b981', lastActive: Date.now() - 60000 },
+  { id: 'u_kusnaedi', name: 'Kusnaedi', role: 'user', email: 'dikisolihin605@gmail.com', avatarColor: '#3b82f6', lastActive: Date.now() - 120000 },
+  { id: 'u_samin', name: 'Samin', role: 'user', email: 'dikisolihin605@gmail.com', avatarColor: '#14b8a6', lastActive: Date.now() - 180000 },
+  { id: 'u_junaedi', name: 'Junaedi', role: 'user', email: 'dikisolihin605@gmail.com', avatarColor: '#06b6d4', lastActive: Date.now() - 240000 },
+  { id: 'u_randi', name: 'Randi', role: 'user', email: 'dikisolihin605@gmail.com', avatarColor: '#6366f1', lastActive: Date.now() - 300000 },
+  { id: 'u_roy', name: 'Roy', role: 'user', email: 'dikisolihin605@gmail.com', avatarColor: '#f97316', lastActive: Date.now() - 360000 },
+  { id: 'u_romi', name: 'Romi', role: 'user', email: 'dikisolihin605@gmail.com', avatarColor: '#84cc16', lastActive: Date.now() - 420000 },
+  { id: 'u_kosasih', name: 'Kosasih', role: 'user', email: 'dikisolihin605@gmail.com', avatarColor: '#0284c7', lastActive: Date.now() - 480000 },
+  { id: 'u_nasrul', name: 'Nasrul', role: 'user', email: 'dikisolihin605@gmail.com', avatarColor: '#8b5cf6', lastActive: Date.now() - 540000 },
 ];
 
 // Helper to parse site row from prompt
@@ -195,7 +195,7 @@ function loadDB(): DatabaseSchema {
         result.users[existingIndex].role = officialUser.role;
         modified = true;
       }
-      if (!result.users[existingIndex].email && officialUser.email) {
+      if (result.users[existingIndex].email !== officialUser.email) {
         result.users[existingIndex].email = officialUser.email;
         modified = true;
       }
@@ -789,11 +789,21 @@ app.post('/api/auth/google', (req, res) => {
   const cleanEmail = (email || '').trim().toLowerCase();
   const cleanName = (name || cleanEmail.split('@')[0] || 'Pengguna Google').trim();
 
-  // Find user by email or by name
-  let user = db.users.find(
-    u => (u.email && u.email.toLowerCase() === cleanEmail) ||
-         u.name.toLowerCase() === cleanName.toLowerCase()
-  );
+  // Find user by name first (if specified), especially for shared Gmail dikisolihin605@gmail.com
+  let user: AppUser | undefined;
+  if (cleanName && cleanName.toLowerCase() !== 'pengguna google' && cleanName.toLowerCase() !== 'dikisolihin605') {
+    user = db.users.find(
+      u => u.name.toLowerCase() === cleanName.toLowerCase() ||
+           u.name.toLowerCase().replace(/\s*\(admin\)/g, '').trim() === cleanName.toLowerCase().replace(/\s*\(admin\)/g, '').trim() ||
+           u.name.toLowerCase().includes(cleanName.toLowerCase()) ||
+           cleanName.toLowerCase().includes(u.name.toLowerCase())
+    );
+  }
+  if (!user) {
+    user = db.users.find(
+      u => (u.email && u.email.toLowerCase() === cleanEmail)
+    );
+  }
 
   if (user) {
     if (cleanEmail && !user.email) user.email = cleanEmail;

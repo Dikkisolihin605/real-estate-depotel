@@ -1377,7 +1377,7 @@ export default function App() {
 
   const handleGoogleLogin = async (email: string, name: string, avatarUrl?: string) => {
     try {
-      const res = await fetch('/api/auth/google', {
+      const res = await fetch(getApiUrl('/api/auth/google'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, name, avatarUrl }),
@@ -1391,12 +1391,20 @@ export default function App() {
       }
     } catch (_) {}
 
-    // Resilient fallback (for Vercel static deployment or network failures):
-    const existing = data?.users?.find(
-      (u) =>
-        (u.email && u.email.toLowerCase() === email.toLowerCase()) ||
-        u.name.toLowerCase() === name.toLowerCase()
-    );
+    // Resilient fallback (for Vercel static deployment or offline):
+    let existing: AppUser | undefined;
+    if (name && name.toLowerCase() !== 'pengguna google' && name.toLowerCase() !== 'dikisolihin605') {
+      existing = data?.users?.find(
+        (u) =>
+          u.name.toLowerCase() === name.toLowerCase() ||
+          u.name.toLowerCase().replace(/\s*\(admin\)/g, '').trim() === name.toLowerCase().replace(/\s*\(admin\)/g, '').trim() ||
+          u.name.toLowerCase().includes(name.toLowerCase()) ||
+          name.toLowerCase().includes(u.name.toLowerCase())
+      );
+    }
+    if (!existing) {
+      existing = data?.users?.find((u) => u.email && u.email.toLowerCase() === email.toLowerCase());
+    }
     if (existing) {
       handleSelectUser(existing);
     } else {

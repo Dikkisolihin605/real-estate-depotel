@@ -35,7 +35,7 @@ export const UserLoginModal: React.FC<UserLoginModalProps> = ({
   // Selected login tab: 'name' | 'google'
   const [activeTab, setActiveTab] = useState<'name' | 'google'>('name');
   const [typedName, setTypedName] = useState('');
-  const [googleEmail, setGoogleEmail] = useState('');
+  const [googleEmail, setGoogleEmail] = useState('dikisolihin605@gmail.com');
   const [googleName, setGoogleName] = useState('');
   const [isSubmittingGoogle, setIsSubmittingGoogle] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -265,14 +265,51 @@ export const UserLoginModal: React.FC<UserLoginModalProps> = ({
               <div className="rounded-2xl border border-blue-500/40 bg-blue-950/40 p-3.5 space-y-2">
                 <div className="flex items-center gap-2 text-xs font-black text-blue-300">
                   <Mail className="h-4 w-4 text-blue-400" />
-                  <span>Masuk dengan Akun Google / Gmail</span>
+                  <span>Akun Utama Terhubung: dikisolihin605@gmail.com</span>
                 </div>
                 <p className="text-[11px] text-slate-300 leading-relaxed">
-                  Gunakan email Google / Gmail Anda untuk masuk. Nama dan identitas Anda akan tersambung otomatis.
+                  Semua akun Admin dan User kini terhubung menggunakan database bersama via <strong>dikisolihin605@gmail.com</strong> agar seluruh tim termonitor langsung saat mengisi token dan swacam.
                 </p>
               </div>
 
-              <form onSubmit={handleGoogleSubmit} className="space-y-3">
+              {/* Quick Select Petugas / Anggota Tim */}
+              <div className="space-y-1.5">
+                <label className="block text-xs font-bold text-slate-300">
+                  Pilih Nama Petugas / Teknisi:
+                </label>
+                <div className="grid grid-cols-2 gap-1.5 max-h-48 overflow-y-auto p-1 bg-slate-950/60 rounded-2xl border border-slate-800">
+                  {allAvailableUsers.map((u) => (
+                    <button
+                      key={u.id}
+                      type="button"
+                      onClick={() => {
+                        setGoogleName(u.name);
+                        setGoogleEmail('dikisolihin605@gmail.com');
+                        onSelectUser({ ...u, email: 'dikisolihin605@gmail.com' });
+                        onClose();
+                      }}
+                      className="flex items-center gap-2 p-2 rounded-xl bg-slate-800/80 hover:bg-blue-600/30 border border-slate-700/60 text-left transition cursor-pointer group"
+                    >
+                      <div
+                        className="h-6 w-6 rounded-full flex items-center justify-center text-[10px] font-black text-white flex-shrink-0"
+                        style={{ backgroundColor: u.avatarColor || '#3b82f6' }}
+                      >
+                        {u.name.substring(0, 1).toUpperCase()}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="text-[11px] font-black text-white truncate group-hover:text-blue-300">
+                          {u.name}
+                        </div>
+                        <div className="text-[9px] text-slate-400">
+                          {u.role === 'admin' ? '⭐ Admin' : 'Teknisi'}
+                        </div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <form onSubmit={handleGoogleSubmit} className="space-y-3 pt-1">
                 <div>
                   <label className="block text-xs font-bold text-slate-300 mb-1">
                     Email Google / Gmail <span className="text-rose-400">*</span>
@@ -284,7 +321,7 @@ export const UserLoginModal: React.FC<UserLoginModalProps> = ({
                       required
                       value={googleEmail}
                       onChange={(e) => setGoogleEmail(e.target.value)}
-                      placeholder="nama.teknisi@gmail.com"
+                      placeholder="dikisolihin605@gmail.com"
                       className="w-full rounded-2xl border border-slate-700 bg-slate-800 py-3 pl-10 pr-4 text-xs font-bold text-white placeholder-slate-500 focus:border-blue-500 focus:outline-none"
                     />
                   </div>
@@ -292,13 +329,13 @@ export const UserLoginModal: React.FC<UserLoginModalProps> = ({
 
                 <div>
                   <label className="block text-xs font-bold text-slate-300 mb-1">
-                    Nama Panggilan Anda (Opsional)
+                    Atau Ketik Nama Panggilan Anda
                   </label>
                   <input
                     type="text"
                     value={googleName}
                     onChange={(e) => setGoogleName(e.target.value)}
-                    placeholder="Contoh: Diki, Saddam, Kusnaedi, dll..."
+                    placeholder="Contoh: Diki, Saddam, Kusnaedi, Samin, dll..."
                     className="w-full rounded-2xl border border-slate-700 bg-slate-800 px-3.5 py-3 text-xs font-bold text-white placeholder-slate-500 focus:border-blue-500 focus:outline-none"
                   />
                 </div>
