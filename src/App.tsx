@@ -57,7 +57,14 @@ const saveOfflineQueue = (queue: OfflineAction[]) => {
   } catch {}
 };
 
-const LIVE_BACKEND_URL = 'https://ais-pre-sw2koyy2muflakec6krfxb-148906958408.asia-southeast1.run.app';
+export const getFormattedTimestamp = () => {
+  const now = new Date();
+  const time = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  const date = now.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+  return `${date}, ${time}`;
+};
+
+const LIVE_BACKEND_URL = 'https://ais-dev-sw2koyy2muflakec6krfxb-148906958408.asia-southeast1.run.app';
 
 export const getApiUrl = (path: string): string => {
   if (typeof window !== 'undefined') {
@@ -109,7 +116,7 @@ export default function App() {
   const [activeTypeId, setActiveTypeId] = useState<string>('type_token');
   const [currentView, setCurrentView] = useState<'dashboard' | 'monitoring'>('dashboard');
   const [liveStatus, setLiveStatus] = useState<'connecting' | 'connected' | 'disconnected'>('connecting');
-  const [lastSyncedAt, setLastSyncedAt] = useState<string>(() => new Date().toLocaleTimeString('id-ID'));
+  const [lastSyncedAt, setLastSyncedAt] = useState<string>(() => getFormattedTimestamp());
   
   // Synchronously restore user session on mount so page refresh never resets to login
   const [currentUser, setCurrentUser] = useState<AppUser | null>(() => {
@@ -182,6 +189,9 @@ export default function App() {
   // Performance cache ref to eliminate unnecessary re-renders
   const lastDataStringRef = useRef<string>('');
 
+  // Lock ref for in-flight toggles to prevent local status flicker / race condition
+  const pendingTogglesRef = useRef<Map<string, { checked: boolean; time: number }>>(new Map());
+
   // PWA update handler
   const [pwaUpdateAction, setPwaUpdateAction] = useState<(() => void) | null>(null);
 
@@ -201,7 +211,7 @@ export default function App() {
     for (const item of queue) {
       try {
         if (item.type === 'toggle') {
-          const res = await fetch(`/api/sites/${item.typeId}/${item.siteId}/toggle`, {
+          const res = await fetch(getApiUrl(`/api/sites/${item.typeId}/${item.siteId}/toggle`), {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(item.payload),
@@ -209,7 +219,7 @@ export default function App() {
           if (res.ok) successCount++;
           else remaining.push(item);
         } else if (item.type === 'token') {
-          const res = await fetch(`/api/sites/${item.typeId}/${item.siteId}/token`, {
+          const res = await fetch(getApiUrl(`/api/sites/${item.typeId}/${item.siteId}/token`), {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(item.payload),
@@ -304,8 +314,22 @@ export default function App() {
         }
       }
 
+      // Apply active in-flight toggles to prevent temporary flicker / race condition
+      if (json.updateTypes) {
+        for (const ut of json.updateTypes) {
+          if (ut.sites) {
+            for (const s of ut.sites) {
+              const pending = pendingTogglesRef.current.get(s.id);
+              if (pending && Date.now() - pending.time < 5000) {
+                s.checked = pending.checked;
+              }
+            }
+          }
+        }
+      }
+
       setLiveStatus('connected');
-      setLastSyncedAt(new Date().toLocaleTimeString('id-ID'));
+      setLastSyncedAt(getFormattedTimestamp());
 
       const jsonStr = JSON.stringify(json);
       if (quiet && jsonStr === lastDataStringRef.current) {
@@ -541,6 +565,20 @@ export default function App() {
       }
     } catch (_) {}
 
+    // Apply active in-flight toggles to prevent temporary flicker / race condition
+    if (newDb.updateTypes) {
+      for (const ut of newDb.updateTypes) {
+        if (ut.sites) {
+          for (const s of ut.sites) {
+            const pending = pendingTogglesRef.current.get(s.id);
+            if (pending && Date.now() - pending.time < 5000) {
+              s.checked = pending.checked;
+            }
+          }
+        }
+      }
+    }
+
     const newStr = JSON.stringify(newDb);
     if (newStr !== lastDataStringRef.current) {
       lastDataStringRef.current = newStr;
@@ -560,27 +598,70 @@ export default function App() {
     const connectSSE = () => {
       if (isDisposed) return;
       try {
+        if (typeof navigator !== 'undefined' && navigator.onLine === false) {
+          setLiveStatus('disconnected');
+          return;
+        }
+        setLiveStatus((prev) => (prev === 'connected' ? 'connected' : 'connecting'));
         es = new EventSource(getApiUrl('/api/events'));
+        
+        es.onopen = () => {
+          if (isDisposed) return;
+          setLiveStatus('connected');
+          setLastSyncedAt(getFormattedTimestamp());
+        };
+
         es.onmessage = (event) => {
-          if (!event.data) return;
+          if (isDisposed || !event.data) return;
           try {
             const parsed = JSON.parse(event.data);
             if (parsed.db) {
+              setLiveStatus('connected');
+              setLastSyncedAt(getFormattedTimestamp());
               processIncomingDb(parsed.db);
             }
           } catch (_) {}
         };
+
         es.onerror = () => {
           es?.close();
           es = null;
           if (!isDisposed) {
-            reconnectTimer = setTimeout(connectSSE, 2000);
+            setLiveStatus('disconnected');
+            reconnectTimer = setTimeout(() => {
+              if (!isDisposed) {
+                setLiveStatus('connecting');
+                connectSSE();
+              }
+            }, 3000);
           }
         };
-      } catch (_) {}
+      } catch (_) {
+        if (!isDisposed) {
+          setLiveStatus('disconnected');
+          reconnectTimer = setTimeout(connectSSE, 3000);
+        }
+      }
     };
 
     connectSSE();
+
+    const handleOnline = () => {
+      setLiveStatus('connecting');
+      connectSSE();
+      fetchData(true);
+    };
+
+    const handleOffline = () => {
+      setLiveStatus('disconnected');
+      if (es) {
+        es.close();
+        es = null;
+      }
+    };
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
 
     // Multi-tab instant sync in the same browser session
     let channel: BroadcastChannel | null = null;
@@ -589,6 +670,7 @@ export default function App() {
         channel = new BroadcastChannel('depotel_realtime_sync');
         channel.onmessage = (event) => {
           if (event.data?.db) {
+            setLastSyncedAt(getFormattedTimestamp());
             processIncomingDb(event.data.db);
           }
         };
@@ -603,12 +685,15 @@ export default function App() {
       }
       if (reconnectTimer) clearTimeout(reconnectTimer);
       if (channel) channel.close();
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
     };
-  }, [processIncomingDb]);
+  }, [processIncomingDb, fetchData]);
 
-  // 2. Ultra-snappy periodic heartbeat & fallback data sync (every 1 second)
+  // 2. Periodic heartbeat & safety sync (no aggressive 1s polling conflicts)
   useEffect(() => {
-    const interval = setInterval(() => {
+    // Send heartbeat every 15 seconds to keep user status updated
+    const heartbeatInterval = setInterval(() => {
       if (currentUser) {
         fetch(getApiUrl('/api/heartbeat'), {
           method: 'POST',
@@ -616,8 +701,18 @@ export default function App() {
           body: JSON.stringify({ userId: currentUser.id, userName: currentUser.name }),
         }).catch(() => {});
       }
+    }, 15000);
+
+    // Fallback sync: if disconnected, poll every 4s; if connected, safe background sync every 20s
+    const fallbackSyncInterval = setInterval(() => {
+      if (liveStatus !== 'connected') {
+        fetchData(true);
+      }
+    }, 4000);
+
+    const slowSafetySync = setInterval(() => {
       fetchData(true);
-    }, 1000);
+    }, 20000);
 
     const handleFocusSync = () => {
       if (document.visibilityState === 'visible') {
@@ -628,11 +723,13 @@ export default function App() {
     document.addEventListener('visibilitychange', handleFocusSync);
 
     return () => {
-      clearInterval(interval);
+      clearInterval(heartbeatInterval);
+      clearInterval(fallbackSyncInterval);
+      clearInterval(slowSafetySync);
       window.removeEventListener('focus', handleFocusSync);
       document.removeEventListener('visibilitychange', handleFocusSync);
     };
-  }, [currentUser, fetchData]);
+  }, [currentUser, fetchData, liveStatus]);
 
   // 3. Listen for Firebase Google Auth token with Google Sheets access
   useEffect(() => {
@@ -691,6 +788,9 @@ export default function App() {
     const previousState = site.checked;
     const newChecked = !previousState;
 
+    // Track active toggle in-flight to prevent race condition or overwrite
+    pendingTogglesRef.current.set(site.id, { checked: newChecked, time: Date.now() });
+
     // Optimistic UI update
     setData((prev) => {
       if (!prev) return prev;
@@ -744,7 +844,7 @@ export default function App() {
           const errJson = await res.json().catch(() => ({}));
           throw new Error(errJson.error || 'Izin ditolak: Tidak dapat mengubah status');
         }
-        // If non-403 (e.g. 404 on static Vercel host), proceed with local persistent state and offline queue
+        // If non-403 (e.g. 404 or network break), proceed with local persistent state and offline queue
         const queue = getOfflineQueue();
         const newAction: OfflineAction = {
           id: `act_${Date.now()}_${Math.random()}`,
@@ -785,9 +885,8 @@ export default function App() {
       }
 
       showToast(newChecked ? `✅ ${site.siteCode} ditandai Sudah Tercentang!` : `❌ ${site.siteCode} ditandai Belum Tercentang!`);
-      // Re-fetch to keep counts and state strictly synced with backend
-      fetchData(true);
     } catch (err: any) {
+      pendingTogglesRef.current.delete(site.id);
       // Revert ONLY if explicitly denied by 403 permission error
       if (err.message && err.message.includes('Izin ditolak')) {
         setData((prev) => {
@@ -825,6 +924,11 @@ export default function App() {
       saveOfflineQueue(queue);
       setOfflineQueueCount(queue.length);
       showToast(newChecked ? `✅ ${site.siteCode} ditandai Sudah Tercentang!` : `❌ ${site.siteCode} ditandai Belum Tercentang!`);
+    } finally {
+      // Release in-flight lock after SSE and backend broadcast settle
+      setTimeout(() => {
+        pendingTogglesRef.current.delete(site.id);
+      }, 1500);
     }
   };
 

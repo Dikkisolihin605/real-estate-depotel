@@ -7,7 +7,7 @@
       "name": "Diki Solihin (Admin)",
       "role": "admin",
       "avatarColor": "#0e2a6d",
-      "lastActive": 1792496766459,
+      "lastActive": 1792683266024,
       "email": "dikisolihin605@gmail.com"
     },
     {
@@ -116,7 +116,9 @@
           "siteName": "COMBATCIPINANGBUNDER",
           "checked": false,
           "tokenNumber": "",
-          "photos": []
+          "photos": [],
+          "updatedBy": "Diki Solihin (Admin)",
+          "updatedAt": "22/10/2026, 22.34.26"
         },
         {
           "id": "st_4",
@@ -132,9 +134,11 @@
           "customerId": "544104549801",
           "siteCode": "EPE121",
           "siteName": "KEBONPALAKPMELAYUEMACRO",
-          "checked": false,
+          "checked": true,
           "tokenNumber": "",
-          "photos": []
+          "photos": [],
+          "updatedBy": "Petugas DEPOTEL",
+          "updatedAt": "22/10/2026, 22.34.05"
         },
         {
           "id": "st_6",
@@ -150,27 +154,33 @@
           "customerId": "544104493058",
           "siteCode": "EPE105",
           "siteName": "JLKEBONPALA2EASYMACRO",
-          "checked": false,
+          "checked": true,
           "tokenNumber": "",
-          "photos": []
+          "photos": [],
+          "updatedBy": "Petugas DEPOTEL",
+          "updatedAt": "22/10/2026, 22.34.05"
         },
         {
           "id": "st_8",
           "customerId": "547202531409",
           "siteCode": "EPE123",
           "siteName": "JLRAHAYU2KALISARIEMACRO",
-          "checked": false,
+          "checked": true,
           "tokenNumber": "",
-          "photos": []
+          "photos": [],
+          "updatedBy": "Petugas DEPOTEL",
+          "updatedAt": "22/10/2026, 22.34.05"
         },
         {
           "id": "st_9",
           "customerId": "547402040765",
           "siteCode": "EPE101",
           "siteName": "BINCONDETEMACRO",
-          "checked": false,
+          "checked": true,
           "tokenNumber": "",
-          "photos": []
+          "photos": [],
+          "updatedBy": "Petugas DEPOTEL",
+          "updatedAt": "22/10/2026, 22.34.05"
         },
         {
           "id": "st_10",
@@ -213,9 +223,11 @@
           "customerId": "547104799792",
           "siteCode": "EPE078",
           "siteName": "BATUAMPAREMACROODMT",
-          "checked": false,
+          "checked": true,
           "tokenNumber": "",
-          "photos": []
+          "photos": [],
+          "updatedBy": "Petugas DEPOTEL",
+          "updatedAt": "22/10/2026, 22.34.05"
         },
         {
           "id": "st_15",
@@ -231,18 +243,22 @@
           "customerId": "547104987172",
           "siteCode": "EPE130",
           "siteName": "KKPHALIMEMACRO",
-          "checked": false,
+          "checked": true,
           "tokenNumber": "",
-          "photos": []
+          "photos": [],
+          "updatedBy": "Petugas DEPOTEL",
+          "updatedAt": "22/10/2026, 22.34.05"
         },
         {
           "id": "st_17",
           "customerId": "547104989288",
           "siteCode": "EPE162",
           "siteName": "JLKAMPUNGBARUHALIMEMACRO",
-          "checked": false,
+          "checked": true,
           "tokenNumber": "",
-          "photos": []
+          "photos": [],
+          "updatedBy": "Petugas DEPOTEL",
+          "updatedAt": "22/10/2026, 22.34.05"
         },
         {
           "id": "st_18",
@@ -258,45 +274,55 @@
           "customerId": "544205132920",
           "siteCode": "EPE153",
           "siteName": "JLKAPUK3EMACRO",
-          "checked": false,
+          "checked": true,
           "tokenNumber": "",
-          "photos": []
+          "photos": [],
+          "updatedBy": "Petugas DEPOTEL",
+          "updatedAt": "22/10/2026, 22.34.05"
         },
         {
           "id": "st_20",
           "customerId": "544104486916",
           "siteCode": "EPE100",
           "siteName": "GGCIPARAI10EMACRO",
-          "checked": false,
+          "checked": true,
           "tokenNumber": "",
-          "photos": []
+          "photos": [],
+          "updatedBy": "Petugas DEPOTEL",
+          "updatedAt": "22/10/2026, 22.34.05"
         },
         {
           "id": "st_21",
           "customerId": "544205151888",
           "siteCode": "EPE149",
           "siteName": "JLLANGGARRAYAPDBAMBUEMACRO",
-          "checked": false,
+          "checked": true,
           "tokenNumber": "",
-          "photos": []
+          "photos": [],
+          "updatedBy": "Petugas DEPOTEL",
+          "updatedAt": "22/10/2026, 22.34.05"
         },
         {
           "id": "st_22",
           "customerId": "544205145232",
           "siteCode": "EPE119",
           "siteName": "JLKELURAHANRAYADURENSAWITEMACRO",
-          "checked": false,
+          "checked": true,
           "tokenNumber": "",
-          "photos": []
+          "photos": [],
+          "updatedBy": "Petugas DEPOTEL",
+          "updatedAt": "22/10/2026, 22.34.05"
         },
         {
           "id": "st_23",
           "customerId": "541301866778",
           "siteCode": "EPE122",
           "siteName": "JLPULONANGKAPULOGADUNGEMACRO",
-          "checked": false,
+          "checked": true,
           "tokenNumber": "",
-          "photos": []
+          "photos": [],
+          "updatedBy": "Petugas DEPOTEL",
+          "updatedAt": "22/10/2026, 22.34.05"
         },
         {
           "id": "st_24",
@@ -321,9 +347,11 @@
           "customerId": "547104958661",
           "siteCode": "EPE107",
           "siteName": "JLBATUBULATEMACRO",
-          "checked": false,
+          "checked": true,
           "tokenNumber": "",
-          "photos": []
+          "photos": [],
+          "updatedBy": "Petugas DEPOTEL",
+          "updatedAt": "22/10/2026, 22.34.05"
         },
         {
           "id": "st_27",
@@ -366,9 +394,11 @@
           "customerId": "514485849567",
           "siteCode": "EPE111",
           "siteName": "DARULARQOMEASYMACRO-PTI",
-          "checked": false,
+          "checked": true,
           "tokenNumber": "",
-          "photos": []
+          "photos": [],
+          "updatedBy": "Petugas DEPOTEL",
+          "updatedAt": "22/10/2026, 22.34.05"
         }
       ],
       "createdAt": 1789539302138
